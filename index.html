@@ -38,6 +38,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+        /* ===== BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; }
+
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(16px);
@@ -48,46 +51,152 @@
             background: radial-gradient(circle at top right, rgba(26, 74, 138, 0.3), transparent 50%),
                         radial-gradient(circle at bottom left, rgba(255, 214, 0, 0.08), transparent 40%);
         }
+        .card-hover {
+            transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
         .card-hover:hover {
             background: rgba(26, 74, 138, 0.4);
             border-color: rgba(255, 214, 0, 0.5);
             transform: translateY(-5px);
         }
+
+        /* ===== CAROUSEL – GPU-accelerated, no layout thrash ===== */
+        #carousel-track {
+            display: flex;
+            will-change: transform;
+            /* Use transform3d to keep on compositor layer */
+            transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1);
+        }
+        .carousel-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            /* Prevent layout-causing height recalculations */
+            min-width: 0;
+        }
+        .carousel-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Avoid decode jank on transition */
+            will-change: auto;
+        }
+        /* Reserve space so no layout shift when images load */
+        #carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            /* Fixed height: tall on desktop, adaptive on mobile */
+            height: 560px;
+        }
+        @media (max-width: 768px) {
+            #carousel-wrapper {
+                height: 320px;
+            }
+        }
+
+        /* ===== HERO IMAGE – responsive aspect ratio ===== */
+        .hero-image-box {
+            position: relative;
+            width: 80%;
+            aspect-ratio: 4 / 5;
+            max-height: 700px;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #08111D;
+        }
+        .hero-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0.7;
+        }
+
+        /* ===== PORTFOLIO GRID ===== */
+        .portfolio-card-img {
+            width: 100%;
+            height: 12rem; /* 192px – consistent card height */
+            object-fit: cover;
+        }
+
+        /* ===== FLOATING BADGES on hero ===== */
+        .floating-badge {
+            position: absolute;
+            z-index: 10;
+        }
+        @media (max-width: 1023px) {
+            .floating-badge { display: none; }
+        }
+
+        /* ===== MOBILE NAV close on link click ===== */
+        #mobile-menu a {
+            display: block;
+        }
+
+        /* ===== REDUCED MOTION ===== */
+        @media (prefers-reduced-motion: reduce) {
+            #carousel-track { transition: none; }
+            .card-hover:hover { transform: none; }
+            .animate-pulse { animation: none; }
+            .animate-bounce { animation: none; }
+        }
+
+        /* ===== SCROLLBAR styling ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0D1B2E; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,214,0,0.3); border-radius: 3px; }
     </style>
 </head>
 <body class="bg-navy text-white font-sans antialiased overflow-x-hidden selection:bg-brandyellow selection:text-navy">
 
+    <!-- ======================== NAVBAR ======================== -->
     <header class="fixed w-full top-0 z-50 glass-panel border-b-0 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="nav-logo">
-                <img src="Img/R3c_Logo1.jpg" onerror="this.src='https://placehold.co/150x50/0D1B2E/FFD600?text=R3C+Studio'" alt="R3C Creative Studio Logo" class="h-10 w-auto rounded">   
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <a href="#" aria-label="R3C Creative Studio - Inicio">
+                <img src="Img/R3c_Logo1.jpg"
+                     onerror="this.src='https://placehold.co/150x150/0D1B2E/FFD600?text=R3C+Studio'"
+                     alt="R3C Creative Studio Logo"
+                     class="h-9 sm:h-10 w-auto rounded"
+                     width="150" height="150">
             </a>
             
-            <nav class="hidden md:flex gap-8 items-center font-medium text-sm text-gray-300">
-                <a href="#nosotros" class="hover:text-brandyellow transition-colors">Nosotros</a>
-                <a href="#servicios" class="hover:text-brandyellow transition-colors">Servicios</a>
-                <a href="#metodologia" class="hover:text-brandyellow transition-colors">Proceso</a>
-                <a href="#trabajos" class="hover:text-brandyellow transition-colors">Trabajos</a>
-                <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" class="bg-brandyellow text-navy px-5 py-2.5 rounded-full font-bold hover:bg-brandyellowHover transition-colors shadow-[0_0_15px_rgba(255,214,0,0.3)] text-black">
+            <nav class="hidden md:flex gap-6 lg:gap-8 items-center font-medium text-sm text-gray-300" aria-label="Navegación principal">
+                <a href="#nosotros"   class="hover:text-brandyellow transition-colors">Nosotros</a>
+                <a href="#servicios"  class="hover:text-brandyellow transition-colors">Servicios</a>
+                <a href="#metodologia"class="hover:text-brandyellow transition-colors">Proceso</a>
+                <a href="#trabajos"   class="hover:text-brandyellow transition-colors">Trabajos</a>
+                <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+                   class="bg-brandyellow text-navy px-4 lg:px-5 py-2.5 rounded-full font-bold hover:bg-brandyellowHover transition-colors shadow-[0_0_15px_rgba(255,214,0,0.3)]">
                     Agendar Plática
                 </a>
             </nav>
 
-            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
-                <i data-lucide="menu" class="w-7 h-7"></i>
+            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none p-2" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+                <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-white/10 px-6 py-4 flex flex-col gap-4">
-            <a href="#nosotros" class="text-gray-300 hover:text-brandyellow py-2">Nosotros</a>
-            <a href="#servicios" class="text-gray-300 hover:text-brandyellow py-2">Servicios</a>
-            <a href="#metodologia" class="text-gray-300 hover:text-brandyellow py-2">Proceso</a>
-            <a href="#trabajos" class="text-gray-300 hover:text-brandyellow py-2">Trabajos</a>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-white/10 px-6 py-4 flex flex-col gap-1" role="navigation" aria-label="Menú móvil">
+            <a href="#nosotros"    class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Nosotros</a>
+            <a href="#servicios"   class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Servicios</a>
+            <a href="#metodologia" class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Proceso</a>
+            <a href="#trabajos"    class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Trabajos</a>
+            <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+               class="mt-3 bg-brandyellow text-navy px-5 py-3 rounded-full font-bold text-center hover:bg-brandyellowHover transition-colors">
+                Agendar Plática
+            </a>
         </div>
     </header>
 
-    <aside class="fixed right-4 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3 hidden lg:flex">
+    <!-- ======================== SOCIAL SIDEBAR (desktop only) ======================== -->
+    <aside class="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col" aria-label="Redes sociales">
         <div class="glass-panel p-2 rounded-2xl flex flex-col gap-2 shadow-2xl">
+            <!-- Location -->
             <div class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 cursor-default transition-colors">
                 <i data-lucide="map-pin" class="w-5 h-5 text-brandyellow"></i>
                 <div class="absolute right-full mr-4 bg-white text-navy text-sm font-semibold px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
@@ -95,17 +204,17 @@
                 </div>
             </div>
             <div class="w-8 h-[1px] bg-white/10 mx-auto"></div>
-            
-            <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors">
+            <!-- WhatsApp -->
+            <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors" aria-label="WhatsApp">
                 <i data-lucide="message-circle" class="w-5 h-5 text-green-400"></i>
                 <div class="absolute right-full mr-4 bg-white text-navy text-sm font-semibold px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl flex flex-col">
                     <span>WhatsApp</span><span class="font-normal text-gray-500">984 211 0363</span>
                 </div>
             </a>
             <div class="w-8 h-[1px] bg-white/10 mx-auto"></div>
-            
-            <a href="https://www.instagram.com/r3c.studio/" target="_blank" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-pink-400">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/r3c.studio/" target="_blank" rel="noopener" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-pink-400" aria-hidden="true">
                     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
@@ -115,9 +224,9 @@
                 </div>
             </a>
             <div class="w-8 h-[1px] bg-white/10 mx-auto"></div>
-
-            <a href="https://www.tiktok.com/@R3CCreativeStudio" target="_blank" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors">
-                <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@R3CCreativeStudio" target="_blank" rel="noopener" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors" aria-label="TikTok">
+                <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
                 <div class="absolute right-full mr-4 bg-white text-navy text-sm font-semibold px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl flex flex-col">
                     <span>TikTok</span><span class="font-normal text-gray-500">@R3CCreativeStudio</span>
                 </div>
@@ -126,117 +235,139 @@
     </aside>
 
     <main>
-        <section class="relative min-h-screen flex items-center pt-24 pb-12 hero-gradient">
-            <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-12 items-center">
-                <div class="flex flex-col gap-6 z-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel w-fit border-brandyellow/30 text-brandyellow text-xs font-bold uppercase tracking-wider">
-                        <span class="w-2 h-2 rounded-full bg-brandyellow animate-pulse"></span>
+        <!-- ======================== HERO ======================== -->
+        <section class="relative min-h-screen flex items-center pt-24 pb-12 hero-gradient" aria-label="Inicio">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                <!-- Text -->
+                <div class="flex flex-col gap-5 z-10">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel w-fit border border-brandyellow/30 text-brandyellow text-xs font-bold uppercase tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-brandyellow animate-pulse" aria-hidden="true"></span>
                         Estudio Creativo · Playa del Carmen
                     </div>
-                    <h1 class="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight">
-                        Contenido que <br>
-                        hace crecer <br>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
+                        Contenido que<br>hace crecer<br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-brandyellow to-yellow-200">
                             tu negocio.
                         </span>
                     </h1>
-                    <p class="text-lg text-gray-400 max-w-lg leading-relaxed font-light">
-                        Transformamos ideas en contenido estratégico que atrae clientes y fortalece tu presencia digital. 
+                    <p class="text-base sm:text-lg text-gray-400 max-w-lg leading-relaxed font-light">
+                        Transformamos ideas en contenido estratégico que atrae clientes y fortalece tu presencia digital.
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mt-2">
-                        <a href="https://api.whatsapp.com/send/?phone=9842110363" class="bg-brandyellow text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-brandyellowHover transition-all text-center flex items-center justify-center gap-2">
-                            Hablemos de tu proyecto <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+                           class="bg-brandyellow text-navy px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-brandyellowHover transition-all text-center flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,214,0,0.25)]">
+                            Hablemos de tu proyecto <i data-lucide="arrow-right" class="w-5 h-5" aria-hidden="true"></i>
                         </a>
                     </div>
 
-                    <!-- Estadísticas Rápidas -->
-                    <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-8 pt-8 border-t border-white/10">
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-6 mt-6 pt-6 sm:mt-8 sm:pt-8 border-t border-white/10">
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-white">+100</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide sm:tracking-widest font-bold mt-1 leading-tight break-words">Piezas de contenido creadas</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Piezas de contenido</p>
                         </div>
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-white">+5</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide sm:tracking-widest font-bold mt-1 leading-tight break-words">Marcas impulsadas</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Marcas impulsadas</p>
                         </div>
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-brandyellow">100%</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide sm:tracking-widest font-bold mt-1 leading-tight break-words">Estrategias personalizadas</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Estrategia personalizada</p>
                         </div>
                     </div>
                 </div>
                 
+                <!-- Hero Image -->
                 <div class="relative hidden lg:block z-10">
-                    <div class="w-full h-auto bg-darker rounded-3xl border border-white/10 p-4 relative flex items-center justify-center overflow-hidden">
-                        <!-- Imagen con fallback para previsualización web -->
-                        <img src="Img/Portada 1.png" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" alt="Producción audiovisual" class="w-full h-auto object-contain rounded-2xl opacity-50">
-                        
-                        <div class="absolute top-12 left-8 glass-panel px-6 py-4 rounded-xl flex items-center gap-4 animate-[bounce_4s_infinite]">
-                            <i data-lucide="video" class="text-brandyellow w-8 h-8"></i>
-                            <div>
-                                <p class="font-bold">Video & Reels</p>
-                                <p class="text-xs text-gray-400">Conversión</p>
-                            </div>
+                    <div class="hero-image-box">
+                        <img src="Img/Portada 1.png"
+                             onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'"
+                             alt="Producción audiovisual R3C Creative Studio"
+                             width="800" height="600"
+                             loading="lazy">
+                    </div>
+                    <!-- Floating badges -->
+                    <div class="floating-badge top-10 left-6 glass-panel px-5 py-3.5 rounded-xl flex items-center gap-3 shadow-xl">
+                        <i data-lucide="video" class="text-brandyellow w-7 h-7 flex-shrink-0" aria-hidden="true"></i>
+                        <div>
+                            <p class="font-bold text-sm">Video & Reels</p>
+                            <p class="text-xs text-gray-400">Conversión</p>
                         </div>
-                        <div class="absolute bottom-16 right-8 glass-panel px-6 py-4 rounded-xl flex items-center gap-4 animate-[bounce_5s_infinite_reverse]">
-                            <i data-lucide="target" class="text-pink-400 w-8 h-8"></i>
-                            <div>
-                                <p class="font-bold">Meta Ads</p>
-                                <p class="text-xs text-gray-400">Audiencia Correcta</p>
-                            </div>
+                    </div>
+                    <div class="floating-badge bottom-14 right-6 glass-panel px-5 py-3.5 rounded-xl flex items-center gap-3 shadow-xl">
+                        <i data-lucide="target" class="text-pink-400 w-7 h-7 flex-shrink-0" aria-hidden="true"></i>
+                        <div>
+                            <p class="font-bold text-sm">Meta Ads</p>
+                            <p class="text-xs text-gray-400">Audiencia correcta</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="nosotros" class="py-24 bg-darker relative border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <!-- ======================== NOSOTROS ======================== -->
+        <section id="nosotros" class="py-16 sm:py-24 bg-darker relative border-t border-white/5" aria-label="Nosotros">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
                 
-                <!-- CARRUSEL DE IMÁGENES -->
+                <!-- CAROUSEL – optimized -->
                 <div class="relative group">
-                    <div class="aspect-square bg-bluemid/20 rounded-full blur-3xl absolute -inset-4 z-0"></div>
+                    <!-- Ambient glow – pointer-events-none so it doesn't block clicks -->
+                    <div class="aspect-square bg-bluemid/20 rounded-full blur-3xl absolute -inset-4 z-0 pointer-events-none" aria-hidden="true"></div>
                     
-                    <div class="relative z-10 rounded-3xl border border-white/10 shadow-2xl overflow-hidden h-[700px] w-full">
-                        <!-- Track -->
-                        <div id="about-carousel" class="flex transition-transform duration-1000 ease-in-out h-full w-full">
-                            <!-- Slide 1 -->
-                            <div class="min-w-full h-full flex-shrink-0 bg-navy flex items-center justify-center">
-                                <img src="Img/Nosotros 1.png" alt="Equipo R3C 1" class="object-cover h-full w-full">
+                    <div id="carousel-wrapper" class="relative z-10">
+                        <!-- Track: GPU layer, no JS layout reads during animation -->
+                        <div id="carousel-track">
+                            <div class="carousel-slide" role="group" aria-label="Slide 1 de 2">
+                                <img src="Img/Nosotros 1.png"
+                                     onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80'"
+                                     alt="Equipo R3C Creative Studio – sesión de trabajo"
+                                     width="800" height="560"
+                                     loading="lazy"
+                                     decoding="async">
                             </div>
-                            <!-- Slide 2 -->
-                            <div class="min-w-full h-full flex-shrink-0 bg-navy flex items-center justify-center">
-                                <img src="Img/Nosotros 2.png" alt="Equipo R3C 2" class="object-cover h-full w-full">
+                            <div class="carousel-slide" role="group" aria-label="Slide 2 de 2">
+                                <img src="Img/Nosotros 2.png"
+                                     onerror="this.src='https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&q=80'"
+                                     alt="Equipo R3C Creative Studio – producción de contenido"
+                                     width="800" height="560"
+                                     loading="lazy"
+                                     decoding="async">
                             </div>
                         </div>
 
-                        <!-- Botones Control -->
-                        <button onclick="moveCarousel(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-brandyellow hover:text-navy text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all focus:outline-none z-30">
-                            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        <!-- Prev / Next – always visible on mobile, hover on desktop -->
+                        <button id="carousel-prev"
+                                aria-label="Imagen anterior"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brandyellow hover:text-navy text-white p-2.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brandyellow z-30 opacity-80 md:opacity-0 md:group-hover:opacity-100">
+                            <i data-lucide="chevron-left" class="w-5 h-5" aria-hidden="true"></i>
                         </button>
-                        <button onclick="moveCarousel(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-brandyellow hover:text-navy text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all focus:outline-none z-30">
-                            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        <button id="carousel-next"
+                                aria-label="Imagen siguiente"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brandyellow hover:text-navy text-white p-2.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brandyellow z-30 opacity-80 md:opacity-0 md:group-hover:opacity-100">
+                            <i data-lucide="chevron-right" class="w-5 h-5" aria-hidden="true"></i>
                         </button>
 
-                        <!-- Puntos Indicadores -->
-                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
-                            <button onclick="setCarousel(0)" id="dot-0" class="w-2.5 h-2.5 rounded-full bg-brandyellow transition-all focus:outline-none"></button>
-                            <button onclick="setCarousel(1)" id="dot-1" class="w-2.5 h-2.5 rounded-full bg-white/50 transition-all focus:outline-none"></button>
+                        <!-- Dots -->
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-30" role="tablist" aria-label="Controles del carrusel">
+                            <button role="tab" aria-label="Ir a slide 1" aria-selected="true"  id="dot-0" class="w-2.5 h-2.5 rounded-full bg-brandyellow transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white"></button>
+                            <button role="tab" aria-label="Ir a slide 2" aria-selected="false" id="dot-1" class="w-2.5 h-2.5 rounded-full bg-white/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white"></button>
                         </div>
                     </div>
 
-                    <div class="absolute -bottom-6 -right-6 glass-panel p-6 rounded-2xl z-20">
-                        <p class="text-brandyellow font-black text-2xl">MADE BY R3C</p>
-                        <p class="text-sm font-medium text-gray-300">Nuestra Historia</p>
+                    <!-- Badge -->
+                    <div class="absolute -bottom-5 -right-4 sm:-bottom-6 sm:-right-6 glass-panel p-4 sm:p-6 rounded-2xl z-20 shadow-xl">
+                        <p class="text-brandyellow font-black text-lg sm:text-2xl">MADE BY R3C</p>
+                        <p class="text-xs sm:text-sm font-medium text-gray-300">Nuestra Historia</p>
                     </div>
                 </div>
                 
-                <div class="flex flex-col gap-6">
-                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-sm">NOSOTROS</h2>
-                    <h3 class="text-4xl md:text-5xl font-black leading-tight">Venimos a revolucionar la creación de contenido.</h3>
-                    <div class="text-gray-400 text-lg font-light leading-relaxed flex flex-col gap-4">
-                        <p> <strong class="text-white">R3C</strong> es un estudio creativo que ayuda a las marcas a crecer a través de estrategia, contenido y soluciones digitales.</p>
+                <!-- Text -->
+                <div class="flex flex-col gap-5 pt-4 md:pt-0">
+                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm">NOSOTROS</h2>
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">Venimos a revolucionar la creación de contenido.</h3>
+                    <div class="text-gray-400 text-base sm:text-lg font-light leading-relaxed flex flex-col gap-4">
+                        <p><strong class="text-white">R3C</strong> es un estudio creativo que ayuda a las marcas a crecer a través de estrategia, contenido y soluciones digitales.</p>
                         <p>Nos involucramos en cada proyecto para entender sus objetivos y desarrollar acciones que generen impacto real.</p>
                         <p>Más que ofrecer servicios, construimos estrategias que ayudan a nuestros clientes a conectar con su audiencia, fortalecer su presencia y crecer con dirección.</p>
                     </div>
@@ -244,264 +375,285 @@
             </div>
         </section>
 
-        <section id="servicios" class="py-24 bg-navy relative border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+        <!-- ======================== SERVICIOS ======================== -->
+        <section id="servicios" class="py-16 sm:py-24 bg-navy relative border-t border-white/5" aria-label="Servicios">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-16 gap-4 sm:gap-6">
                     <div class="max-w-2xl">
-                        <h2 class="text-brandyellow font-bold uppercase tracking-widest text-sm mb-4">Lo que hacemos</h2>
-                        <h3 class="text-4xl md:text-5xl font-black">Servicios Creativos</h3>
+                        <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Lo que hacemos</h2>
+                        <h3 class="text-3xl sm:text-4xl md:text-5xl font-black">Servicios Creativos</h3>
                     </div>
-                    <p class="text-gray-400 md:text-right max-w-sm">Especializados en restaurantes, hoteles y cafeterías que buscan destacar en digital.</p>
+                    <p class="text-gray-400 md:text-right max-w-sm text-sm sm:text-base">Especializados en restaurantes, hoteles y cafeterías que buscan destacar en digital.</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Servicio 1 -->
-                    <div class="glass-panel p-8 rounded-3xl transition-all duration-300 card-hover group border-t border-t-white/10">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors">
-                            <i data-lucide="camera" class="w-7 h-7"></i>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                    <!-- Fotografía -->
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors">
+                            <i data-lucide="camera" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
-                        <h4 class="text-2xl font-bold mb-3">Fotografía</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Imágenes de alta calidad para mostrar tus productos, platillos, espacios y capturar la verdadera identidad de tu negocio.</p>
-                    </div>
+                        <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Fotografía</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Capturamos la identidad de tu negocio a través de imágenes que destacan su valor y generan una conexión auténtica.</p>
+                    </article>
 
-                    <!-- Servicio 2 -->
-                    <div class="glass-panel p-8 rounded-3xl transition-all duration-300 card-hover group border-t border-t-white/10">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-pink-400 group-hover:bg-pink-400 group-hover:text-white transition-colors">
-                            <i data-lucide="clapperboard" class="w-7 h-7"></i>
+                    <!-- Video & Reels -->
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-pink-400 group-hover:bg-pink-400 group-hover:text-white transition-colors">
+                            <i data-lucide="clapperboard" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
-                        <h4 class="text-2xl font-bold mb-3">Video & Reels</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Contenido corto, dinámico y diseñado específicamente para captar la atención y convertir en plataformas como Instagram, TikTok y Facebook.</p>
-                    </div>
+                        <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Video & Reels</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Contenido corto, dinámico y diseñado para captar atención y convertir en Instagram, TikTok y Facebook.</p>
+                    </article>
 
-                    <!-- Servicio 3 -->
-                    <div class="glass-panel p-8 rounded-3xl transition-all duration-300 card-hover group border-t border-t-white/10">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-400 group-hover:text-white transition-colors">
-                            <i data-lucide="plane" class="w-7 h-7"></i>
+                    <!-- Drone -->
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-blue-400 group-hover:bg-blue-400 group-hover:text-white transition-colors">
+                            <i data-lucide="plane" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
-                        <h4 class="text-2xl font-bold mb-3">Tomas Drone</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Perspectivas aéreas espectaculares. Ideales para mostrar ubicaciones privilegiadas, eventos al aire libre y propiedades a escala real.</p>
-                    </div>
+                        <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Gestión de Redes Sociales</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Planificación, creación de contenido, publicación y seguimiento de contenido estratégico mensual</p>
+                    </article>
 
-                    <!-- Servicio 4 -->
-                    <div class="glass-panel p-8 rounded-3xl transition-all duration-300 card-hover group border-t border-t-white/10">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-green-400 group-hover:bg-green-400 group-hover:text-navy transition-colors">
-                            <i data-lucide="crosshair" class="w-7 h-7"></i>
+                    <!-- Meta Ads -->
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-green-400 group-hover:bg-green-400 group-hover:text-navy transition-colors">
+                            <i data-lucide="crosshair" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
-                        <h4 class="text-2xl font-bold mb-3">Meta Ads</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Gestión estratégica de campañas publicitarias en Facebook e Instagram enfocadas en llegar a tu audiencia correcta sin desperdiciar dinero.</p>
-                    </div>
+                        <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Meta Ads</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Anuncios estratégicos enfocados e atraer clientes potenciales y generar resultados medibles para incrementar tu alcance o ventas.</p>
+                    </article>
 
-                    <!-- Servicio 5 -->
-                    <div class="glass-panel p-8 rounded-3xl transition-all duration-300 card-hover group border-t border-t-white/10">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-purple-400 group-hover:bg-purple-400 group-hover:text-white transition-colors">
-                            <i data-lucide="pen-tool" class="w-7 h-7"></i>
+                    <!-- Branding -->
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-purple-400 group-hover:bg-purple-400 group-hover:text-white transition-colors">
+                            <i data-lucide="pen-tool" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
-                        <h4 class="text-2xl font-bold mb-3">Branding</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Creación de identidad visual coherente y memorable: logotipo, paleta de colores, tipografía y aplicaciones de tu marca.</p>
-                    </div>
+                        <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Branding</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Identidad visual coherente y memorable: logotipo, paleta de colores, tipografía y aplicaciones de marca.</p>
+                    </article>
 
-                    <!-- Servicio 6 (Desarrollo Web) -->
-                    <div class="glass-panel p-8 rounded-3xl transition-all duration-300 card-hover group border-t border-t-white/10">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-orange-400 group-hover:bg-orange-400 group-hover:text-white transition-colors">
-                            <i data-lucide="monitor-smartphone" class="w-7 h-7"></i>
+                    <!-- Desarrollo Web -->
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-orange-400 group-hover:bg-orange-400 group-hover:text-white transition-colors">
+                            <i data-lucide="monitor-smartphone" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
-                        <h4 class="text-2xl font-bold mb-3">Desarrollo Web</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Diseño y programación de sitios web a medida, optimizados para móviles y pensados como una herramienta de publicidad y ventas 24/7.</p>
-                    </div>
+                        <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Desarrollo Web</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Sitios web a medida, optimizados para móviles y pensados como herramienta de ventas 24/7.</p>
+                    </article>
 
                     <!-- CTA Asesoría -->
-                    <div class="md:col-span-2 lg:col-span-3 bg-gradient-to-br from-bluemid to-navy p-8 rounded-3xl transition-all duration-300 border border-brandyellow/30 flex flex-col md:flex-row justify-between items-center gap-6 mt-4">
+                    <div class="sm:col-span-2 lg:col-span-3 bg-gradient-to-br from-bluemid to-navy p-6 sm:p-8 rounded-3xl border border-brandyellow/30 flex flex-col md:flex-row justify-between items-center gap-5 mt-2">
                         <div class="max-w-2xl text-center md:text-left">
-                            <h4 class="text-2xl font-bold mb-3 text-brandyellow">Asesoría Inicial Gratuita</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Ofrecemos una plática gratuita para diagnosticar qué necesita tu negocio y cómo podemos resolverlo de forma efectiva.</p>
+                            <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-brandyellow">Asesoría Inicial Gratuita</h4>
+                            <p class="text-gray-300 text-sm leading-relaxed">Plática gratuita para diagnosticar qué necesita tu negocio y cómo podemos resolverlo de forma efectiva.</p>
                         </div>
-                        <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" class="inline-flex items-center gap-2 bg-white text-navy px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors w-fit whitespace-nowrap">
-                            Agendar ahora <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 bg-white text-navy px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors whitespace-nowrap flex-shrink-0">
+                            Agendar ahora <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
-                
-                <p class="text-center text-xs text-gray-600 mt-8">* Como servicio complementario a tu estrategia, también ofrecemos diseño y desarrollo web a medida.</p>
+                <p class="text-center text-xs text-gray-600 mt-6">* El desarrollo web se ofrece como servicio complementario a tu estrategia digital.</p>
             </div>
         </section>
 
-        <section id="metodologia" class="py-24 bg-darker relative border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center max-w-2xl mx-auto mb-16">
-                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-sm mb-4">Metodología de Trabajo</h2>
-                    <h3 class="text-4xl md:text-5xl font-black">Nuestro proceso en 4 pasos</h3>
+        <!-- ======================== METODOLOGÍA ======================== -->
+        <section id="metodologia" class="py-16 sm:py-24 bg-darker relative border-t border-white/5" aria-label="Proceso">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Metodología de Trabajo</h2>
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black">Nuestro proceso en 4 pasos</h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-                    <!-- Línea conectora desktop -->
-                    <div class="hidden md:block absolute top-8 left-[10%] right-[10%] h-[1px] bg-white/10 z-0"></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 relative">
+                    <!-- Connector line desktop -->
+                    <div class="hidden md:block absolute top-8 left-[10%] right-[10%] h-[1px] bg-white/10 z-0" aria-hidden="true"></div>
 
-                    <!-- Paso 1 -->
-                    <div class="relative z-10 flex flex-col items-center text-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-xl font-black text-brandyellow shadow-[0_0_20px_rgba(255,214,0,0.2)]">1</div>
-                        <h4 class="font-bold text-xl">Plática</h4>
-                        <p class="text-sm text-gray-400 font-light">Nos reunimos para entender qué hace tu negocio y cuáles son tus metas. Sin formularios largos ni burocracia.</p>
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-lg sm:text-xl font-black text-brandyellow shadow-[0_0_20px_rgba(255,214,0,0.2)]">1</div>
+                        <h4 class="font-bold text-lg sm:text-xl">Diagnóstico</h4>
+                        <p class="text-xs sm:text-sm text-gray-400 font-light">Analizamos tu negocio, competencia local y presencia digital actual. En 30 minutos sabemos exactamente qué contenido necesitas, qué está fallando y definimos costos.</p>
                     </div>
-
-                    <!-- Paso 2 -->
-                    <div class="relative z-10 flex flex-col items-center text-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-navy border-2 border-white/20 flex items-center justify-center text-xl font-black text-gray-300">2</div>
-                        <h4 class="font-bold text-xl">Propuesta</h4>
-                        <p class="text-sm text-gray-400 font-light">Entregamos un plan detallado: qué se hará, cómo, cuándo y cuánto costará. Todo transparente antes de empezar.</p>
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-white/20 flex items-center justify-center text-lg sm:text-xl font-black text-gray-300">2</div>
+                        <h4 class="font-bold text-lg sm:text-xl">Propuesta</h4>
+                        <p class="text-xs sm:text-sm text-gray-400 font-light">Te entregamos un plan de contenido con fechas, formatos, plataformas, copys, referencias. Ves exactamente qué vas a recibir de manera transparente.</p>
                     </div>
-
-                    <!-- Paso 3 -->
-                    <div class="relative z-10 flex flex-col items-center text-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-navy border-2 border-white/20 flex items-center justify-center text-xl font-black text-gray-300">3</div>
-                        <h4 class="font-bold text-xl">Producción</h4>
-                        <p class="text-sm text-gray-400 font-light">Ponemos manos a la obra: ejecutamos la filmación, sesión de fotos o implementamos las campañas publicitarias.</p>
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-white/20 flex items-center justify-center text-lg sm:text-xl font-black text-gray-300">3</div>
+                        <h4 class="font-bold text-lg sm:text-xl">Producción</h4>
+                        <p class="text-xs sm:text-sm text-gray-400 font-light">Llegamos a tu negocio, filmamos, fotografiamos y editamos. Ejecutamos cada sesión o campaña publicitaria con todo listo.</p>
                     </div>
-
-                    <!-- Paso 4 -->
-                    <div class="relative z-10 flex flex-col items-center text-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-xl font-black text-brandyellow">4</div>
-                        <h4 class="font-bold text-xl">Entrega</h4>
-                        <p class="text-sm text-gray-400 font-light">Te proporcionamos el contenido listo para publicarse o activamos tu campaña, entregando métricas de resultados.</p>
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-lg sm:text-xl font-black text-brandyellow">4</div>
+                        <h4 class="font-bold text-lg sm:text-xl">Entrega</h4>
+                        <p class="text-xs sm:text-sm text-gray-400 font-light"> Programamos tu contenido, activamos tu campañas y al cierre del mes te entregamos métricas reales para definir la estrategia del siguiente.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="trabajos" class="py-24 bg-navy relative border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="mb-16">
-                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-sm mb-4">Experiencia</h2>
-                    <h3 class="text-4xl md:text-5xl font-black">Casos de Éxito</h3>
+        <!-- ======================== TRABAJOS ======================== -->
+        <section id="trabajos" class="py-16 sm:py-24 bg-navy relative border-t border-white/5" aria-label="Casos de éxito">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="mb-10 sm:mb-16">
+                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Experiencia</h2>
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black">Casos de Éxito</h3>
                 </div>
 
-                <div class="grid lg:grid-cols-3 gap-8 mb-20">
-                    <!-- Zarandisky -->
-                    <div class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
-                        <div class="h-48 bg-gradient-to-br from-orange-600 to-red-800 relative flex items-center justify-center overflow-hidden">
-                            <span class="text-3xl font-black text-white/50 uppercase tracking-widest rotate-[-5deg] scale-125">Negocio Locales</span>
-                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">De negocio local a marca reconocida</div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20">
+                    <!-- Card 1 -->
+                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
+                        <div class="h-44 sm:h-48 bg-gradient-to-br from-orange-600 to-red-800 relative flex items-center justify-center overflow-hidden">
+                            <span class="text-2xl sm:text-3xl font-black text-white/30 uppercase tracking-widest rotate-[-5deg] scale-125 select-none" aria-hidden="true">Negocio Local</span>
+                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Negocios locales</div>
                         </div>
-                        <div class="p-8 flex-1 flex flex-col">
-                            <h4 class="text-xl font-bold mb-3">De negocio local a marca reconocida</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-1">Creación de contenido premium (reels y fotografía) junto con una estrategia enfocada en alcance, conexión y crecimiento orgánico.</p>
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">De negocio local a marca reconocida</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Reels, fotografía y estrategia enfocados en alcance, conexión y crecimiento orgánico.</p>
                             <div class="bg-white/5 p-4 rounded-xl border border-white/10">
                                 <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
-                                <p class="text-sm font-medium">Crecimiento de +10K seguidores y videos virales con +50M de vistas gracias a contenido estratégico.</p>
+                                <p class="text-sm font-medium">+10K seguidores y videos virales con +50M de vistas.</p>
                             </div>
                         </div>
-                    </div>
+                    </article>
 
-                    <!-- Hotel Boutique -->
-                    <div class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
-                        <div class="h-48 bg-gradient-to-br from-teal-700 to-emerald-900 relative flex items-center justify-center overflow-hidden">
-                            <i data-lucide="bed-double" class="w-20 h-20 text-white/20"></i>
+                    <!-- Card 2 -->
+                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
+                        <div class="h-44 sm:h-48 bg-gradient-to-br from-teal-700 to-emerald-900 relative flex items-center justify-center overflow-hidden">
+                            <i data-lucide="bed-double" class="w-16 h-16 sm:w-20 sm:h-20 text-white/20" aria-hidden="true"></i>
                             <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Campaña Digital</div>
                         </div>
-                        <div class="p-8 flex-1 flex flex-col">
-                            <h4 class="text-xl font-bold mb-3">Contenido que Genera Impacto</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-1">Desarrollo de una campaña creativa basada en contenido estratégico para aumentar visibilidad, posicionamiento y conexión con la comunidad.</p>
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Contenido que Genera Impacto</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Campaña creativa para aumentar visibilidad, posicionamiento y conexión con la comunidad.</p>
                             <div class="bg-white/5 p-4 rounded-xl border border-white/10 mt-auto">
                                 <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
-                                <p class="text-sm font-medium">+121K vistas y una mayor presencia de marca frente a nuevas audiencias.</p>
+                                <p class="text-sm font-medium">+121K vistas y mayor presencia frente a nuevas audiencias.</p>
                             </div>
                         </div>
-                    </div>
+                    </article>
 
-                    <!-- Cafetería Local -->
-                    <div class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
-                        <div class="h-48 bg-gradient-to-br from-amber-700 to-yellow-900 relative flex items-center justify-center overflow-hidden">
-                            <i data-lucide="coffee" class="w-20 h-20 text-white/20"></i>
+                    <!-- Card 3 -->
+                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col sm:col-span-2 lg:col-span-1">
+                        <div class="h-44 sm:h-48 bg-gradient-to-br from-amber-700 to-yellow-900 relative flex items-center justify-center overflow-hidden">
+                            <i data-lucide="coffee" class="w-16 h-16 sm:w-20 sm:h-20 text-white/20" aria-hidden="true"></i>
                             <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Eventos Premium</div>
                         </div>
-                        <div class="p-8 flex-1 flex flex-col">
-                            <h4 class="text-xl font-bold mb-3">Cobertura Visual de Eventos</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-1">Producción de fotografía y contenido audiovisual para capturar la esencia del evento, resaltando la experiencia, detalles y momentos clave a través de una narrativa visual premium.</p>
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Cobertura Visual de Eventos</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Producción de fotografía y contenido audiovisual para capturar la esencia del evento, resaltando la experiencia, detalles y momentos clave a través de una narrativa visual premium.</p>
                             <div class="bg-white/5 p-4 rounded-xl border border-white/10 mt-auto">
                                 <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
                                 <p class="text-sm font-medium">Contenido reutilizable para marketing, relaciones públicas y redes sociales.</p>
                             </div>
                         </div>
-                    </div>
+                    </article>
+
+                    <!-- Card 4 -->
+                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col sm:col-span-2 lg:col-span-1">
+                        <div class="h-44 sm:h-48 bg-gradient-to-br from-amber-700 to-yellow-900 relative flex items-center justify-center overflow-hidden">
+                            <i data-lucide="coffee" class="w-16 h-16 sm:w-20 sm:h-20 text-white/20" aria-hidden="true"></i>
+                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Desarrollo Web</div>
+                        </div>
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Una Plataforma que Impulsa Ventas</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Diseño y desarrollo de un sitio web con pagos en línea, información clara y una experiencia intuitiva para que cada cliente pueda cotizar, elegir y pagar de forma rápida y segura.</p>
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10 mt-auto">
+                                <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
+                                <p class="text-sm font-medium">Un proceso de compra más eficiente, mayor confianza del cliente y una plataforma preparada para convertir visitas en ventas.</p>
+                            </div>
+                        </div>
+                    </article>
                 </div>
 
-                <!-- Lista de Clientes -->
-                <div class="border-t border-white/10 pt-16">
-                    <p class="text-center text-sm font-bold text-gray-500 uppercase tracking-widest mb-10">Marcas que han confiado en nosotros</p>
-                    <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 opacity-60">
-                        <span class="text-xl font-black uppercase tracking-tight text-white">Coral Coworking</span>
-                        <span class="text-xl font-black uppercase tracking-tight text-white">Chololis</span>
-                        <span class="text-xl font-black uppercase tracking-tight text-white">Charro Zarandiao</span>
-                        <span class="text-xl font-black uppercase tracking-tight text-white">Fresas Aline</span>
-                        <span class="text-xl font-black uppercase tracking-tight text-white">Flori Flowers</span>
-                        <span class="text-xl font-black uppercase tracking-tight text-white">Río Secreto</span>
+                <!-- Clientes -->
+                <div class="border-t border-white/10 pt-12 sm:pt-16">
+                    <p class="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-8 sm:mb-10">Marcas que han confiado en nosotros</p>
+                    <div class="flex flex-wrap justify-center items-center gap-x-8 sm:gap-x-12 gap-y-5 sm:gap-y-8 opacity-60">
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">Coral Coworking</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">Chololis</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">Charro Zarandiao</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">Fresas Aline</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">Flori Flowers</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">Río Secreto</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">LAPASKANA</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">JULEP</span>
+                        <span class="text-base sm:text-xl font-black uppercase tracking-tight text-white">EL DOCTORCITO</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contacto" class="py-24 relative overflow-hidden bg-bluemid/10">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-navy/80"></div>
-            <div class="max-w-4xl mx-auto px-6 relative z-10 text-center flex flex-col items-center gap-8">
-                <h2 class="text-4xl md:text-5xl font-black">¿Hacemos equipo?</h2>
-                <p class="text-xl text-gray-300 font-light max-w-2xl">Escríbenos directamente por WhatsApp. Te responderá una persona real en <strong class="text-white">menos de 24 horas</strong>.</p>
+        <!-- ======================== CTA FINAL ======================== -->
+        <section id="contacto" class="py-16 sm:py-24 relative overflow-hidden bg-bluemid/10" aria-label="Contacto">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-navy/80" aria-hidden="true"></div>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-center flex flex-col items-center gap-6 sm:gap-8">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-black">Llevemos tu marca al siguiente nivel </h2>
+                <p class="text-lg sm:text-xl text-gray-300 font-light max-w-2xl">Agenda una conversación con nosotros y descubre cómo podemos impulsar tu marca.</p>
                 
-                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center mt-6">
-                    <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" class="bg-green-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-green-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/30">
-                        <i data-lucide="message-circle" class="w-6 h-6"></i> 984 211 0363
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center mt-4 sm:mt-6">
+                    <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+                       class="bg-green-500 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-green-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/30">
+                        <i data-lucide="message-circle" class="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true"></i> 984 211 0363
                     </a>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 mt-8">
-                    <!-- Instagram Icon Vector SVG -->
-                    <a href="https://www.instagram.com/r3c.studio/" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-400 hover:text-white transition-colors">
+                <div class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 mt-4 sm:mt-8">
+                    <a href="https://www.instagram.com/r3c.studio/" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
                             <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                             <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
                         </svg>
-                        <span class="break-words text-sm sm:text-base">@r3c.studio</span>
+                        <span class="text-sm sm:text-base">@r3c.studio</span>
                     </a>
-                    <a href="https://www.tiktok.com/@R3CCreativeStudio" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors">
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg> 
-                        <span class="break-words text-sm sm:text-base">@R3CCreativeStudio</span>
+                    <a href="https://www.tiktok.com/@R3CCreativeStudio" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                        <span class="text-sm sm:text-base">@R3CCreativeStudio</span>
                     </a>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-white/10 bg-navy pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-12">
-            <div class="col-span-1 md:col-span-2">
-                <a href="#" class="nav-logo">
-                    <img src="Img/R3c_Logo1.jpg" onerror="this.src='https://placehold.co/150x50/0D1B2E/FFD600?text=R3C+Studio'" alt="R3C Creative Studio" class="h-10 w-auto rounded">
+    <!-- ======================== FOOTER ======================== -->
+    <footer class="border-t border-white/10 bg-navy pt-12 sm:pt-16 pb-6 sm:pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12">
+            <div class="sm:col-span-2">
+                <a href="#" aria-label="R3C Creative Studio – ir al inicio">
+                    <img src="Img/R3c_Logo1.jpg"
+                         onerror="this.src='https://placehold.co/150x50/0D1B2E/FFD600?text=R3C+Studio'"
+                         alt="R3C Creative Studio"
+                         class="h-9 sm:h-10 w-auto rounded"
+                         width="150" height="40">
                 </a>
-                <p class="text-gray-400 max-w-sm font-light mt-4">
-                    La agencia en tiempo real. Estudio creativo en Playa del Carmen, Q.R. enfocado en resultados para negocios locales.
+                <p class="text-gray-400 max-w-sm font-light mt-4 text-sm sm:text-base">
+                    Estudio creativo en Playa del Carmen dedicado a elevar marcas a través de estrategia y contenido.
                 </p>
             </div>
             
             <div>
-                <h4 class="font-bold text-lg mb-4 text-white">Navegación</h4>
-                <ul class="flex flex-col gap-2 text-gray-400">
-                    <li><a href="#nosotros" class="hover:text-brandyellow transition-colors">Nosotros</a></li>
-                    <li><a href="#servicios" class="hover:text-brandyellow transition-colors">Servicios</a></li>
+                <h4 class="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">Navegación</h4>
+                <ul class="flex flex-col gap-2 text-gray-400 text-sm sm:text-base">
+                    <li><a href="#nosotros"    class="hover:text-brandyellow transition-colors">Nosotros</a></li>
+                    <li><a href="#servicios"   class="hover:text-brandyellow transition-colors">Servicios</a></li>
                     <li><a href="#metodologia" class="hover:text-brandyellow transition-colors">Proceso</a></li>
-                    <li><a href="#trabajos" class="hover:text-brandyellow transition-colors">Trabajos</a></li>
+                    <li><a href="#trabajos"    class="hover:text-brandyellow transition-colors">Trabajos</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="font-bold text-lg mb-4 text-white">Contacto</h4>
-                <ul class="flex flex-col gap-3 text-gray-400">
+                <h4 class="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">Contacto</h4>
+                <ul class="flex flex-col gap-3 text-gray-400 text-sm sm:text-base">
                     <li class="flex items-center gap-2">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-brandyellow"></i> Playa del Carmen, Q.R.
+                        <i data-lucide="map-pin" class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true"></i> Playa del Carmen, Q.R.
                     </li>
                     <li class="flex items-center gap-2">
-                        <i data-lucide="phone" class="w-4 h-4 text-brandyellow"></i> 984 211 0363
+                        <i data-lucide="phone" class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true"></i> 984 211 0363
                     </li>
                     <li class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-brandyellow">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true">
                             <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                             <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
@@ -512,26 +664,38 @@
             </div>
         </div>
         
-        <div class="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500">
             <p>&copy; 2026 R3C Creative Studio. Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <!-- ======================== SCRIPTS ======================== -->
     <script>
-        // Inicializar iconos de Lucide una vez que carga la página
-        document.addEventListener("DOMContentLoaded", function() {
-            lucide.createIcons();
-        });
+    // ── Run after DOM is parsed ─────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function () {
 
-        // Funcionalidad del menú móvil
+        // 1. Lucide icons
+        lucide.createIcons();
+
+        // 2. Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenu    = document.getElementById('mobile-menu');
 
         mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
             mobileMenu.classList.toggle('hidden');
+            mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
         });
 
-        // Efecto del Navbar al hacer scroll
+        // Close mobile menu when any nav link inside it is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // 3. Navbar scroll effect – passive listener avoids jank
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 20) {
@@ -541,37 +705,89 @@
                 navbar.classList.remove('shadow-lg', 'bg-darker/90', 'backdrop-blur-lg');
                 navbar.classList.add('glass-panel', 'border-b-0');
             }
+        }, { passive: true });
+
+        // ── CAROUSEL ────────────────────────────────────────────────────
+        // Key improvements vs original:
+        //  • Uses transform3d → stays on GPU compositor layer (no layout thrash)
+        //  • autoplay uses requestAnimationFrame + timestamps instead of setInterval
+        //    so the browser can throttle when the tab is in the background
+        //  • touch/swipe support added for mobile
+        //  • Pause on hover / focus within
+        //  • Uses ARIA live region for screen readers
+
+        const track   = document.getElementById('carousel-track');
+        const dots    = [document.getElementById('dot-0'), document.getElementById('dot-1')];
+        const prevBtn = document.getElementById('carousel-prev');
+        const nextBtn = document.getElementById('carousel-next');
+
+        const TOTAL        = 2;
+        const INTERVAL_MS  = 5000; // 5 s – gives users time to read
+        let current        = 0;
+        let paused         = false;
+        let lastTimestamp  = null;
+        let rafId          = null;
+
+        function goTo(index) {
+            current = (index + TOTAL) % TOTAL;
+            // transform3d forces GPU layer; avoids triggering layout
+            track.style.transform = `translate3d(-${current * 100}%, 0, 0)`;
+            dots.forEach((d, i) => {
+                const active = i === current;
+                d.classList.toggle('bg-brandyellow', active);
+                d.classList.toggle('bg-white/40',    !active);
+                d.setAttribute('aria-selected', String(active));
+            });
+        }
+
+        function tick(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            if (!paused && timestamp - lastTimestamp >= INTERVAL_MS) {
+                goTo(current + 1);
+                lastTimestamp = timestamp;
+            }
+            rafId = requestAnimationFrame(tick);
+        }
+
+        // Start autoplay
+        rafId = requestAnimationFrame(tick);
+
+        // Pause when the user interacts with the carousel area
+        const wrapper = document.getElementById('carousel-wrapper');
+        wrapper.addEventListener('mouseenter', () => { paused = true; });
+        wrapper.addEventListener('mouseleave', () => { paused = false; lastTimestamp = null; });
+        wrapper.addEventListener('focusin',    () => { paused = true; });
+        wrapper.addEventListener('focusout',   () => { paused = false; lastTimestamp = null; });
+
+        // Buttons
+        prevBtn.addEventListener('click', () => { goTo(current - 1); lastTimestamp = null; });
+        nextBtn.addEventListener('click', () => { goTo(current + 1); lastTimestamp = null; });
+
+        // Dots
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => { goTo(i); lastTimestamp = null; });
         });
 
-        // LÓGICA DEL CARRUSEL
-        let currentSlide = 0;
-        const totalSlides = 2;
+        // Touch / swipe support for mobile
+        let touchStartX = 0;
+        wrapper.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].clientX;
+        }, { passive: true });
+        wrapper.addEventListener('touchend', e => {
+            const delta = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(delta) > 40) {
+                goTo(delta < 0 ? current + 1 : current - 1);
+                lastTimestamp = null;
+            }
+        }, { passive: true });
 
-        function moveCarousel(direction) {
-            currentSlide += direction;
-            if (currentSlide >= totalSlides) currentSlide = 0;
-            if (currentSlide < 0) currentSlide = totalSlides - 1;
-            updateCarousel();
-        }
+        // Pause when tab hidden (saves battery)
+        document.addEventListener('visibilitychange', () => {
+            paused = document.hidden;
+            if (!paused) lastTimestamp = null;
+        });
 
-        function setCarousel(index) {
-            currentSlide = index;
-            updateCarousel();
-        }
-
-        function updateCarousel() {
-            const track = document.getElementById('about-carousel');
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // Actualizar colores de los puntitos (dots)
-            document.getElementById('dot-0').classList.replace(currentSlide === 0 ? 'bg-white/50' : 'bg-brandyellow', currentSlide === 0 ? 'bg-brandyellow' : 'bg-white/50');
-            document.getElementById('dot-1').classList.replace(currentSlide === 1 ? 'bg-white/50' : 'bg-brandyellow', currentSlide === 1 ? 'bg-brandyellow' : 'bg-white/50');
-        }
-
-        // Autoplay del carrusel cada 4 segundos
-        setInterval(() => {
-            moveCarousel(1);
-        }, 4000);
+    }); // end DOMContentLoaded
     </script>
 </body>
 </html>
