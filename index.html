@@ -38,6 +38,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+        /* ===== MOBILE UTILITIES ===== */
+        .border-white\/8 { border-color: rgba(255,255,255,0.08); }
+
         /* ===== BASE ===== */
         *, *::before, *::after { box-sizing: border-box; }
 
@@ -51,6 +54,17 @@
             background: radial-gradient(circle at top right, rgba(26, 74, 138, 0.3), transparent 50%),
                         radial-gradient(circle at bottom left, rgba(255, 214, 0, 0.08), transparent 40%);
         }
+        /* Mobile: subtle bottom image preview visible on small screens */
+        @media (max-width: 1023px) {
+            .hero-mobile-hint {
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse at 80% 50%, rgba(26,74,138,0.18) 0%, transparent 65%);
+                pointer-events: none;
+                z-index: 0;
+            }
+        }
         .card-hover {
             transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
         }
@@ -60,17 +74,15 @@
             transform: translateY(-5px);
         }
 
-        /* ===== CAROUSEL – GPU-accelerated, no layout thrash ===== */
+        /* ===== CAROUSEL ABOUT – GPU-accelerated, no layout thrash ===== */
         #carousel-track {
             display: flex;
             will-change: transform;
-            /* Use transform3d to keep on compositor layer */
             transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1);
         }
         .carousel-slide {
             flex: 0 0 100%;
             width: 100%;
-            /* Prevent layout-causing height recalculations */
             min-width: 0;
         }
         .carousel-slide img {
@@ -78,23 +90,18 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* Avoid decode jank on transition */
             will-change: auto;
         }
-        /* Reserve space so no layout shift when images load */
         #carousel-wrapper {
             position: relative;
             overflow: hidden;
             border-radius: 1.5rem;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            /* Fixed height: tall on desktop, adaptive on mobile */
             height: 560px;
         }
         @media (max-width: 768px) {
-            #carousel-wrapper {
-                height: 320px;
-            }
+            #carousel-wrapper { height: 320px; }
         }
 
         /* ===== HERO IMAGE – responsive aspect ratio ===== */
@@ -116,26 +123,80 @@
             opacity: 0.7;
         }
 
-        /* ===== PORTFOLIO GRID ===== */
-        .portfolio-card-img {
-            width: 100%;
-            height: 12rem; /* 192px – consistent card height */
-            object-fit: cover;
+        /* ===== Ocultar barra de scroll para el carrusel de Trabajos ===== */
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         /* ===== FLOATING BADGES on hero ===== */
-        .floating-badge {
-            position: absolute;
-            z-index: 10;
+        .floating-badge { position: absolute; z-index: 10; }
+        @media (max-width: 1023px) { .floating-badge { display: none; } }
+
+        /* ===== NAVBAR ===== */
+        #navbar {
+            transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
         }
-        @media (max-width: 1023px) {
-            .floating-badge { display: none; }
+        #navbar.scrolled {
+            background: rgba(8, 17, 29, 0.96);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* ===== MOBILE NAV close on link click ===== */
-        #mobile-menu a {
-            display: block;
+        /* Desktop nav underline effect */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FFD600;
+            border-radius: 1px;
+            transition: width 0.25s ease;
         }
+        .nav-link:hover { color: #fff; }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Hamburger icon → X animation */
+        .hamburger-line { transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; }
+        #mobile-menu-btn.open .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        #mobile-menu-btn.open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        #mobile-menu-btn.open .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 1.5rem; }
+
+        /* Full-screen mobile menu overlay */
+        #mobile-menu {
+            transform: translateY(-100%);
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        #mobile-menu.open {
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Mobile menu link stagger animation */
+        .mobile-nav-link {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
+        }
+        #mobile-menu.open .mobile-nav-link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.12s; }
+        #mobile-menu.open .mobile-nav-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.19s; }
+        #mobile-menu.open .mobile-nav-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.26s; }
+        #mobile-menu.open .mobile-nav-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.33s; }
+
+        /* Floating WhatsApp button (mobile) */
+        #float-wa {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #float-wa:hover { transform: scale(1.08); }
 
         /* ===== REDUCED MOTION ===== */
         @media (prefers-reduced-motion: reduce) {
@@ -154,44 +215,80 @@
 <body class="bg-navy text-white font-sans antialiased overflow-x-hidden selection:bg-brandyellow selection:text-navy">
 
     <!-- ======================== NAVBAR ======================== -->
-    <header class="fixed w-full top-0 z-50 glass-panel border-b-0 transition-all duration-300" id="navbar">
+    <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
-            <a href="#" aria-label="R3C Creative Studio - Inicio">
-                <img src="Img/R3c_Logo1.jpg"
+
+            <!-- Logo -->
+            <a href="#" class="relative z-[60]" aria-label="R3C Creative Studio - Inicio">
+                <img src="Img/Logo_Renov.jpeg"
                      onerror="this.src='https://placehold.co/150x150/0D1B2E/FFD600?text=R3C+Studio'"
                      alt="R3C Creative Studio Logo"
                      class="h-9 sm:h-10 w-auto rounded"
                      width="150" height="150">
             </a>
-            
+
+            <!-- Desktop Nav -->
             <nav class="hidden md:flex gap-6 lg:gap-8 items-center font-medium text-sm text-gray-300" aria-label="Navegación principal">
-                <a href="#nosotros"   class="hover:text-brandyellow transition-colors">Nosotros</a>
-                <a href="#servicios"  class="hover:text-brandyellow transition-colors">Servicios</a>
-                <a href="#metodologia"class="hover:text-brandyellow transition-colors">Proceso</a>
-                <a href="#trabajos"   class="hover:text-brandyellow transition-colors">Trabajos</a>
+                <a href="#nosotros"    class="nav-link hover:text-white transition-colors py-1">Nosotros</a>
+                <a href="#servicios"   class="nav-link hover:text-white transition-colors py-1">Servicios</a>
+                <a href="#metodologia" class="nav-link hover:text-white transition-colors py-1">Proceso</a>
+                <a href="#trabajos"    class="nav-link hover:text-white transition-colors py-1">Trabajos</a>
                 <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
                    class="bg-brandyellow text-navy px-4 lg:px-5 py-2.5 rounded-full font-bold hover:bg-brandyellowHover transition-colors shadow-[0_0_15px_rgba(255,214,0,0.3)]">
                     Agendar Plática
                 </a>
             </nav>
 
-            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none p-2" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-white/10 px-6 py-4 flex flex-col gap-1" role="navigation" aria-label="Menú móvil">
-            <a href="#nosotros"    class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Nosotros</a>
-            <a href="#servicios"   class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Servicios</a>
-            <a href="#metodologia" class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Proceso</a>
-            <a href="#trabajos"    class="text-gray-300 hover:text-brandyellow py-2.5 border-b border-white/5 transition-colors">Trabajos</a>
-            <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
-               class="mt-3 bg-brandyellow text-navy px-5 py-3 rounded-full font-bold text-center hover:bg-brandyellowHover transition-colors">
-                Agendar Plática
-            </a>
+            <!-- Mobile: mini CTA + Hamburger -->
+            <div class="md:hidden flex items-center gap-3 relative z-[60]">
+                <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+                   class="bg-brandyellow text-navy px-3.5 py-2 rounded-full font-bold text-xs hover:bg-brandyellowHover transition-colors whitespace-nowrap">
+                    Platicar
+                </a>
+                <button id="mobile-menu-btn"
+                        class="text-white focus:outline-none p-1 flex flex-col justify-center items-center gap-[5px] w-8 h-8"
+                        aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+                    <span class="hamburger-line block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="hamburger-line block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="hamburger-line block w-4 h-0.5 bg-white rounded-full"></span>
+                </button>
+            </div>
         </div>
     </header>
+
+    <!-- Mobile Full-Screen Menu Overlay (outside header so header stays on top) -->
+    <div id="mobile-menu"
+         class="fixed inset-0 bg-darker/97 backdrop-blur-2xl z-40 flex flex-col justify-between px-7 pt-24 pb-10 md:hidden"
+         role="navigation" aria-label="Menú móvil" aria-hidden="true">
+
+        <!-- Nav links -->
+        <nav class="flex flex-col gap-1 mt-4">
+            <a href="#nosotros"    class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-brandyellow py-3.5 border-b border-white/8 flex items-center justify-between group">
+                Nosotros <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+            </a>
+            <a href="#servicios"   class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-brandyellow py-3.5 border-b border-white/8 flex items-center justify-between group">
+                Servicios <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+            </a>
+            <a href="#metodologia" class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-brandyellow py-3.5 border-b border-white/8 flex items-center justify-between group">
+                Proceso <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+            </a>
+            <a href="#trabajos"    class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-brandyellow py-3.5 flex items-center justify-between group">
+                Trabajos <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+            </a>
+        </nav>
+
+        <!-- Bottom: CTA + socials -->
+        <div class="flex flex-col gap-5 mt-8">
+            <a href="https://api.whatsapp.com/send/?phone=9842110363" target="_blank" rel="noopener"
+               class="bg-brandyellow text-navy px-6 py-4 rounded-2xl font-black text-lg text-center hover:bg-brandyellowHover transition-colors shadow-[0_0_30px_rgba(255,214,0,0.2)]">
+                Agendar Plática →
+            </a>
+            <div class="flex items-center justify-between text-xs text-gray-600">
+                <a href="https://www.instagram.com/r3c.studio/" target="_blank" rel="noopener" class="hover:text-gray-300 transition-colors">Instagram · @r3c.studio</a>
+                <a href="https://www.tiktok.com/@R3CCreativeStudio" target="_blank" rel="noopener" class="hover:text-gray-300 transition-colors">TikTok · @R3CCreativeStudio</a>
+            </div>
+        </div>
+    </div>
 
     <!-- ======================== SOCIAL SIDEBAR (desktop only) ======================== -->
     <aside class="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col" aria-label="Redes sociales">
@@ -236,7 +333,7 @@
 
     <main>
         <!-- ======================== HERO ======================== -->
-        <section class="relative min-h-screen flex items-center pt-24 pb-12 hero-gradient" aria-label="Inicio">
+        <section class="relative min-h-screen flex items-center pt-20 sm:pt-24 pb-12 hero-gradient" aria-label="Inicio">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 <!-- Text -->
                 <div class="flex flex-col gap-5 z-10">
@@ -265,15 +362,15 @@
                     <div class="grid grid-cols-3 gap-3 sm:gap-6 mt-6 pt-6 sm:mt-8 sm:pt-8 border-t border-white/10">
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-white">+100</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Piezas de contenido</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Piezas de<br class="sm:hidden">contenido</p>
                         </div>
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-white">+5</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Marcas impulsadas</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Marcas<br class="sm:hidden">impulsadas</p>
                         </div>
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-brandyellow">100%</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Estrategia personalizada</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold mt-1 leading-tight">Estrategia<br class="sm:hidden">personalizada</p>
                         </div>
                     </div>
                 </div>
@@ -288,11 +385,11 @@
                              loading="lazy">
                     </div>
                     <!-- Floating badges -->
-                    <div class="floating-badge top-10 left-6 glass-panel px-5 py-3.5 rounded-xl flex items-center gap-3 shadow-xl">
+                    <div class="floating-badge top-10 left--2 glass-panel px-5 py-3.5 rounded-xl flex items-center gap-3 shadow-xl">
                         <i data-lucide="video" class="text-brandyellow w-7 h-7 flex-shrink-0" aria-hidden="true"></i>
                         <div>
                             <p class="font-bold text-sm">Video & Reels</p>
-                            <p class="text-xs text-gray-400">Conversión</p>
+                            <p class="text-xs text-gray-650">Conversión</p>
                         </div>
                     </div>
                     <div class="floating-badge bottom-14 right-6 glass-panel px-5 py-3.5 rounded-xl flex items-center gap-3 shadow-xl">
@@ -310,13 +407,11 @@
         <section id="nosotros" class="py-16 sm:py-24 bg-darker relative border-t border-white/5" aria-label="Nosotros">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
                 
-                <!-- CAROUSEL – optimized -->
+                <!-- CAROUSEL ABOUT -->
                 <div class="relative group">
-                    <!-- Ambient glow – pointer-events-none so it doesn't block clicks -->
                     <div class="aspect-square bg-bluemid/20 rounded-full blur-3xl absolute -inset-4 z-0 pointer-events-none" aria-hidden="true"></div>
                     
                     <div id="carousel-wrapper" class="relative z-10">
-                        <!-- Track: GPU layer, no JS layout reads during animation -->
                         <div id="carousel-track">
                             <div class="carousel-slide" role="group" aria-label="Slide 1 de 2">
                                 <img src="Img/Nosotros 1.png"
@@ -336,7 +431,7 @@
                             </div>
                         </div>
 
-                        <!-- Prev / Next – always visible on mobile, hover on desktop -->
+                        <!-- Prev / Next -->
                         <button id="carousel-prev"
                                 aria-label="Imagen anterior"
                                 class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brandyellow hover:text-navy text-white p-2.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brandyellow z-30 opacity-80 md:opacity-0 md:group-hover:opacity-100">
@@ -356,7 +451,7 @@
                     </div>
 
                     <!-- Badge -->
-                    <div class="absolute -bottom-5 -right-4 sm:-bottom-6 sm:-right-6 glass-panel p-4 sm:p-6 rounded-2xl z-20 shadow-xl">
+                    <div class="absolute -bottom-5 right-0 sm:-bottom-6 sm:-right-6 glass-panel p-4 sm:p-6 rounded-2xl z-20 shadow-xl">
                         <p class="text-brandyellow font-black text-lg sm:text-2xl">MADE BY R3C</p>
                         <p class="text-xs sm:text-sm font-medium text-gray-300">Nuestra Historia</p>
                     </div>
@@ -383,7 +478,7 @@
                         <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Lo que hacemos</h2>
                         <h3 class="text-3xl sm:text-4xl md:text-5xl font-black">Servicios Creativos</h3>
                     </div>
-                    <p class="text-gray-400 md:text-right max-w-sm text-sm sm:text-base">Especializados en restaurantes, hoteles y cafeterías que buscan destacar en digital.</p>
+                    <p class="text-gray-400 md:text-right max-w-sm text-sm sm:text-base">Descubre las soluciones que mejor se alinean con tu proyecto y objetivos.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
@@ -405,10 +500,10 @@
                         <p class="text-gray-400 text-sm leading-relaxed">Contenido corto, dinámico y diseñado para captar atención y convertir en Instagram, TikTok y Facebook.</p>
                     </article>
 
-                    <!-- Drone -->
+                    <!-- Gestion de Redes Sociales -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover group border border-white/5">
                         <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-blue-400 group-hover:bg-blue-400 group-hover:text-white transition-colors">
-                            <i data-lucide="plane" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <i data-lucide="users" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Gestión de Redes Sociales</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Planificación, creación de contenido, publicación y seguimiento de contenido estratégico mensual</p>
@@ -493,78 +588,128 @@
             </div>
         </section>
 
-        <!-- ======================== TRABAJOS ======================== -->
+        <!-- ======================== TRABAJOS (CARRUSEL) ======================== -->
         <section id="trabajos" class="py-16 sm:py-24 bg-navy relative border-t border-white/5" aria-label="Casos de éxito">
             <div class="max-w-7xl mx-auto px-4 sm:px-6">
-                <div class="mb-10 sm:mb-16">
-                    <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Experiencia</h2>
-                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black">Casos de Éxito</h3>
+                <!-- Header con Botones de Navegación -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 sm:mb-16 gap-4">
+                    <div>
+                        <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Experiencia</h2>
+                        <h3 class="text-3xl sm:text-4xl md:text-5xl font-black">Casos de Éxito</h3>
+                    </div>
+                    <!-- Botones de carrusel -->
+                    <div class="flex gap-3">
+                        <button id="btn-trabajos-prev" aria-label="Anterior proyecto" class="bg-white/10 hover:bg-brandyellow hover:text-navy text-white p-3 rounded-full transition-colors focus:outline-none">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                        </button>
+                        <button id="btn-trabajos-next" aria-label="Siguiente proyecto" class="bg-white/10 hover:bg-brandyellow hover:text-navy text-white p-3 rounded-full transition-colors focus:outline-none">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20">
+                <!-- Contenedor del Carrusel (Deslizable horizontalmente) -->
+                <div id="trabajos-carousel" class="flex overflow-x-auto gap-6 sm:gap-8 snap-x snap-mandatory hide-scrollbar pb-8 cursor-grab select-none" style="scroll-behavior: smooth;">
+                    
                     <!-- Card 1 -->
-                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
-                        <div class="h-44 sm:h-48 bg-gradient-to-br from-orange-600 to-red-800 relative flex items-center justify-center overflow-hidden">
-                            <span class="text-2xl sm:text-3xl font-black text-white/30 uppercase tracking-widest rotate-[-5deg] scale-125 select-none" aria-hidden="true">Negocio Local</span>
-                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Negocios locales</div>
-                        </div>
-                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
-                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">De negocio local a marca reconocida</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Reels, fotografía y estrategia enfocados en alcance, conexión y crecimiento orgánico.</p>
-                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                                <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
-                                <p class="text-sm font-medium">+10K seguidores y videos virales con +50M de vistas.</p>
+                    <!-- INSTRUCCIONES PARA LA IMAGEN: 
+                         Al tener la clase "object-cover", cualquier foto (sea vertical u horizontal) 
+                         se autoajustará para rellenar toda la carta sin deformarse. -->
+                    <article class="relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl">
+                        <!-- Imagen de fondo -->
+                        <img src="Img/De negocio local a marca reconocida.JPG" draggable="false" alt="Zarandisky - Restaurante" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0">
+                        
+                        <!-- Capa de Degradado (Efecto Blur/Sombra inferior) para legibilidad -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
+
+                        <!-- Contenido -->
+                        <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
+                            <!-- Badge Superior -->
+                            <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">
+                                Restaurante
+                            </div>
+
+                            <!-- Texto Inferior -->
+                            <div class="mt-auto">
+                                <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white drop-shadow-md">De negocio local a marca reconocida</h4>
+                                <p class="text-gray-300 text-sm leading-relaxed mb-5 sm:mb-6 drop-shadow">Reels, fotografía y estrategia enfocados en alcance, conexión y crecimiento orgánico.</p>
+                                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                                    <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
+                                    <p class="text-sm font-medium text-white">+10K seguidores y videos virales con +50M de vistas.</p>
+                                </div>
                             </div>
                         </div>
                     </article>
 
                     <!-- Card 2 -->
-                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col">
-                        <div class="h-44 sm:h-48 bg-gradient-to-br from-teal-700 to-emerald-900 relative flex items-center justify-center overflow-hidden">
-                            <i data-lucide="bed-double" class="w-16 h-16 sm:w-20 sm:h-20 text-white/20" aria-hidden="true"></i>
-                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Campaña Digital</div>
-                        </div>
-                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
-                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Contenido que Genera Impacto</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Campaña creativa para aumentar visibilidad, posicionamiento y conexión con la comunidad.</p>
-                            <div class="bg-white/5 p-4 rounded-xl border border-white/10 mt-auto">
-                                <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
-                                <p class="text-sm font-medium">+121K vistas y mayor presencia frente a nuevas audiencias.</p>
+                    <article class="relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl">
+                        <!-- Imagen de fondo -->
+                        <img src="Img/Campaña Digital.JPG" draggable="false" alt="Campaña Digital" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
+
+                        <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
+                            <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">
+                                Campaña Digital
+                            </div>
+
+                            <div class="mt-auto">
+                                <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white drop-shadow-md">Contenido que Genera Impacto</h4>
+                                <p class="text-gray-300 text-sm leading-relaxed mb-5 sm:mb-6 drop-shadow">Campaña creativa para aumentar visibilidad, posicionamiento y conexión con la comunidad.</p>
+                                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                                    <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
+                                    <p class="text-sm font-medium text-white">+121K vistas y mayor presencia frente a nuevas audiencias.</p>
+                                </div>
                             </div>
                         </div>
                     </article>
 
                     <!-- Card 3 -->
-                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col sm:col-span-2 lg:col-span-1">
-                        <div class="h-44 sm:h-48 bg-gradient-to-br from-amber-700 to-yellow-900 relative flex items-center justify-center overflow-hidden">
-                            <i data-lucide="coffee" class="w-16 h-16 sm:w-20 sm:h-20 text-white/20" aria-hidden="true"></i>
-                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Eventos Premium</div>
-                        </div>
-                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
-                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Cobertura Visual de Eventos</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Producción de fotografía y contenido audiovisual para capturar la esencia del evento, resaltando la experiencia, detalles y momentos clave a través de una narrativa visual premium.</p>
-                            <div class="bg-white/5 p-4 rounded-xl border border-white/10 mt-auto">
-                                <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
-                                <p class="text-sm font-medium">Contenido reutilizable para marketing, relaciones públicas y redes sociales.</p>
+                    <article class="relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl">
+                        <!-- Imagen de fondo -->
+                        <img src="Img/Eventos Premium.JPG" draggable="false" alt="Eventos Premium" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
+
+                        <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
+                            <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">
+                                Eventos Premium
+                            </div>
+
+                            <div class="mt-auto">
+                                <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white drop-shadow-md">Cobertura Visual de Eventos</h4>
+                                <p class="text-gray-300 text-sm leading-relaxed mb-5 sm:mb-6 drop-shadow">Producción de fotografía y contenido audiovisual para capturar la esencia del evento y momentos clave.</p>
+                                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                                    <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
+                                    <p class="text-sm font-medium text-white">Contenido reutilizable para marketing, RP y redes sociales.</p>
+                                </div>
                             </div>
                         </div>
                     </article>
 
                     <!-- Card 4 -->
-                    <article class="glass-panel rounded-3xl overflow-hidden group flex flex-col sm:col-span-2 lg:col-span-1">
-                        <div class="h-44 sm:h-48 bg-gradient-to-br from-amber-700 to-yellow-900 relative flex items-center justify-center overflow-hidden">
-                            <i data-lucide="coffee" class="w-16 h-16 sm:w-20 sm:h-20 text-white/20" aria-hidden="true"></i>
-                            <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Desarrollo Web</div>
-                        </div>
-                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
-                            <h4 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Una Plataforma que Impulsa Ventas</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-5 sm:mb-6 flex-1">Diseño y desarrollo de un sitio web con pagos en línea, información clara y una experiencia intuitiva para que cada cliente pueda cotizar, elegir y pagar de forma rápida y segura.</p>
-                            <div class="bg-white/5 p-4 rounded-xl border border-white/10 mt-auto">
-                                <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
-                                <p class="text-sm font-medium">Un proceso de compra más eficiente, mayor confianza del cliente y una plataforma preparada para convertir visitas en ventas.</p>
+                    <article class="relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl">
+                        <!-- Imagen de fondo -->
+                        <img src="Img/Desarrollo Web.JPG" draggable="false" alt="Desarrollo Web" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
+
+                        <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
+                            <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">
+                                Desarrollo Web
+                            </div>
+
+                            <div class="mt-auto">
+                                <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white drop-shadow-md">Una Plataforma que Impulsa Ventas</h4>
+                                <p class="text-gray-300 text-sm leading-relaxed mb-5 sm:mb-6 drop-shadow">Diseño de un sitio web con pagos en línea para cotizar, elegir y pagar de forma rápida y segura.</p>
+                                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                                    <p class="text-xs text-brandyellow font-bold uppercase mb-1">El Resultado:</p>
+                                    <p class="text-sm font-medium text-white">Mayor confianza del cliente y una plataforma preparada para convertir.</p>
+                                </div>
                             </div>
                         </div>
                     </article>
+
                 </div>
 
                 <!-- Clientes -->
@@ -622,7 +767,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12">
             <div class="sm:col-span-2">
                 <a href="#" aria-label="R3C Creative Studio – ir al inicio">
-                    <img src="Img/R3c_Logo1.jpg"
+                    <img src="Img/Logo_Renov.jpeg"
                          onerror="this.src='https://placehold.co/150x50/0D1B2E/FFD600?text=R3C+Studio'"
                          alt="R3C Creative Studio"
                          class="h-9 sm:h-10 w-auto rounded"
@@ -669,6 +814,15 @@
         </div>
     </footer>
 
+    <!-- ======================== FLOATING WHATSAPP (Mobile only) ======================== -->
+    <a id="float-wa"
+       href="https://api.whatsapp.com/send/?phone=9842110363"
+       target="_blank" rel="noopener"
+       class="lg:hidden fixed bottom-6 right-4 z-30 bg-green-500 text-white p-4 rounded-full shadow-xl shadow-green-500/30"
+       aria-label="Contactar por WhatsApp">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+    </a>
+
     <!-- ======================== SCRIPTS ======================== -->
     <script>
     // ── Run after DOM is parsed ─────────────────────────────────────────
@@ -681,48 +835,44 @@
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu    = document.getElementById('mobile-menu');
 
+        function openMenu() {
+            mobileMenuBtn.classList.add('open');
+            mobileMenu.classList.add('open');
+            mobileMenu.setAttribute('aria-hidden', 'false');
+            mobileMenuBtn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            mobileMenuBtn.classList.remove('open');
+            mobileMenu.classList.remove('open');
+            mobileMenu.setAttribute('aria-hidden', 'true');
+            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
         mobileMenuBtn.addEventListener('click', () => {
-            const isOpen = !mobileMenu.classList.contains('hidden');
-            mobileMenu.classList.toggle('hidden');
-            mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
+            mobileMenuBtn.classList.contains('open') ? closeMenu() : openMenu();
         });
 
-        // Close mobile menu when any nav link inside it is clicked
         mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                mobileMenuBtn.setAttribute('aria-expanded', 'false');
-            });
+            link.addEventListener('click', closeMenu);
         });
 
-        // 3. Navbar scroll effect – passive listener avoids jank
+        // 3. Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                navbar.classList.add('shadow-lg', 'bg-darker/90', 'backdrop-blur-lg');
-                navbar.classList.remove('glass-panel', 'border-b-0');
-            } else {
-                navbar.classList.remove('shadow-lg', 'bg-darker/90', 'backdrop-blur-lg');
-                navbar.classList.add('glass-panel', 'border-b-0');
-            }
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
         }, { passive: true });
 
-        // ── CAROUSEL ────────────────────────────────────────────────────
-        // Key improvements vs original:
-        //  • Uses transform3d → stays on GPU compositor layer (no layout thrash)
-        //  • autoplay uses requestAnimationFrame + timestamps instead of setInterval
-        //    so the browser can throttle when the tab is in the background
-        //  • touch/swipe support added for mobile
-        //  • Pause on hover / focus within
-        //  • Uses ARIA live region for screen readers
-
+        // ── CAROUSEL ABOUT (Sección Nosotros) ───────────────────────────
         const track   = document.getElementById('carousel-track');
         const dots    = [document.getElementById('dot-0'), document.getElementById('dot-1')];
         const prevBtn = document.getElementById('carousel-prev');
         const nextBtn = document.getElementById('carousel-next');
 
         const TOTAL        = 2;
-        const INTERVAL_MS  = 5000; // 5 s – gives users time to read
+        const INTERVAL_MS  = 5000; 
         let current        = 0;
         let paused         = false;
         let lastTimestamp  = null;
@@ -730,7 +880,6 @@
 
         function goTo(index) {
             current = (index + TOTAL) % TOTAL;
-            // transform3d forces GPU layer; avoids triggering layout
             track.style.transform = `translate3d(-${current * 100}%, 0, 0)`;
             dots.forEach((d, i) => {
                 const active = i === current;
@@ -787,7 +936,64 @@
             if (!paused) lastTimestamp = null;
         });
 
-    }); // end DOMContentLoaded
+        // ── CAROUSEL TRABAJOS (Sección Casos de Éxito) ───────────────────────────
+        const tCarousel = document.getElementById('trabajos-carousel');
+        const tBtnPrev = document.getElementById('btn-trabajos-prev');
+        const tBtnNext = document.getElementById('btn-trabajos-next');
+
+        if (tCarousel && tBtnPrev && tBtnNext) {
+            // Scroll al hacer clic en flecha anterior
+            tBtnPrev.addEventListener('click', () => {
+                const cardWidth = tCarousel.querySelector('article').offsetWidth;
+                // Sumamos el gap aproximado (ej. 24px)
+                tCarousel.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
+            });
+
+            // Scroll al hacer clic en flecha siguiente
+            tBtnNext.addEventListener('click', () => {
+                const cardWidth = tCarousel.querySelector('article').offsetWidth;
+                // Sumamos el gap aproximado (ej. 24px)
+                tCarousel.scrollBy({ left: (cardWidth + 24), behavior: 'smooth' });
+            });
+
+            // Habilitar "Drag to Scroll" (Deslizar con el ratón en computadora)
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            tCarousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                tCarousel.classList.add('cursor-grabbing');
+                tCarousel.classList.remove('cursor-grab', 'snap-mandatory');
+                tCarousel.style.scrollBehavior = 'auto'; // Quitar smooth para arrastre fluido
+                startX = e.pageX - tCarousel.offsetLeft;
+                scrollLeft = tCarousel.scrollLeft;
+            });
+
+            tCarousel.addEventListener('mouseleave', () => {
+                isDown = false;
+                tCarousel.classList.remove('cursor-grabbing');
+                tCarousel.classList.add('cursor-grab', 'snap-mandatory');
+                tCarousel.style.scrollBehavior = 'smooth';
+            });
+
+            tCarousel.addEventListener('mouseup', () => {
+                isDown = false;
+                tCarousel.classList.remove('cursor-grabbing');
+                tCarousel.classList.add('cursor-grab', 'snap-mandatory');
+                tCarousel.style.scrollBehavior = 'smooth';
+            });
+
+            tCarousel.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault(); // Evitar selección de texto/imágenes
+                const x = e.pageX - tCarousel.offsetLeft;
+                const walk = (x - startX) * 2; // Velocidad de arrastre (multiplicador)
+                tCarousel.scrollLeft = scrollLeft - walk;
+            });
+        }
+
+    });
     </script>
 </body>
 </html>
