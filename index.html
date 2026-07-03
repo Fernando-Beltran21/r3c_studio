@@ -222,9 +222,12 @@
         /* ===== NUMBER GLOW PULSE (process steps) ===== */
         .step-node { transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease; }
         .step-node:hover {
-            transform: scale(1.12) translateY(-4px);
+            transform: rotateY(16deg) rotateX(8deg) scale(1.12) translateY(-4px);
             box-shadow: 0 0 35px rgba(255,214,0,0.45);
             border-color: #00E5C7;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .step-node:hover { transform: scale(1.05); }
         }
 
         /* ===== CAROUSEL ABOUT – GPU-accelerated, no layout thrash ===== */
@@ -374,9 +377,80 @@
 
         /* ===== DISPLAY TYPE ===== */
         h1, h2, h3, h4, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+
+        /* ===== NOISE / FILM GRAIN OVERLAY (profundidad y textura premium) ===== */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 45;
+            pointer-events: none;
+            opacity: 0.035;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ===== DOT GRID: textura de fondo para secciones oscuras ===== */
+        .dot-grid {
+            position: absolute; inset: 0; z-index: 0; pointer-events: none;
+            background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
+            background-size: 26px 26px;
+            -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
+        }
+
+        /* ===== Blobs ambientales reutilizables (variantes de posición) ===== */
+        .blob-tl  { top: -10%; left: -8%;  width: 32vw; height: 32vw; max-width: 480px; max-height: 480px; animation: driftA 28s ease-in-out infinite alternate; }
+        .blob-br  { bottom: -12%; right: -8%; width: 30vw; height: 30vw; max-width: 460px; max-height: 460px; animation: driftB 30s ease-in-out infinite alternate; }
+        .blob-mid { top: 15%; left: 55%; width: 24vw; height: 24vw; max-width: 380px; max-height: 380px; animation: driftC 24s ease-in-out infinite alternate; }
+
+        /* ===== Parallax de fondo al hacer scroll (sensación de profundidad 3D) ===== */
+        .parallax-layer { will-change: transform; }
+        @media (prefers-reduced-motion: reduce) {
+            .parallax-layer { transform: none !important; }
+        }
+
+        /* ===== ICONOS 3D: se elevan sobre el eje Z al pasar el cursor ===== */
+        .icon-3d {
+            transition: transform 0.45s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.45s ease;
+        }
+        .group:hover .icon-3d {
+            transform: translateZ(46px) scale(1.08) rotate(-4deg);
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.55);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .group:hover .icon-3d { transform: none; }
+        }
+
+        /* ===== Perspectiva 3D real para los nodos del proceso ===== */
+        .step-perspective { perspective: 900px; }
+
+        /* ===== Footer: borde con gradiente en movimiento ===== */
+        @keyframes borderFlow { 100% { background-position: 0% 0%, 200% 0%; } }
+        .footer-glow-border {
+            background-size: 100% 100%, 200% 100%;
+            animation: borderFlow 8s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .footer-glow-border { animation: none; }
+        }
+
+        /* ===== Mesh de color animado (CTA final) ===== */
+        .mesh-animated {
+            background: radial-gradient(circle at 20% 20%, rgba(0,229,199,0.18), transparent 45%),
+                        radial-gradient(circle at 80% 30%, rgba(255,214,0,0.14), transparent 45%),
+                        radial-gradient(circle at 50% 90%, rgba(124,108,255,0.16), transparent 50%);
+            background-size: 180% 180%;
+            animation: meshMove 18s ease-in-out infinite alternate;
+        }
+        @keyframes meshMove { 100% { background-position: 100% 40%; } }
+        @media (prefers-reduced-motion: reduce) {
+            .mesh-animated { animation: none; }
+        }
     </style>
 </head>
 <body class="bg-navy text-white font-sans antialiased overflow-x-hidden selection:bg-brandyellow selection:text-navy">
+
+    <div class="noise-overlay" aria-hidden="true"></div>
 
     <!-- ======================== NAVBAR ======================== -->
     <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
@@ -567,8 +641,10 @@
         </section>
 
         <!-- ======================== NOSOTROS ======================== -->
-        <section id="nosotros" class="py-16 sm:py-24 bg-darker relative border-t border-white/5" aria-label="Nosotros">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <section id="nosotros" class="py-16 sm:py-24 bg-darker relative border-t border-white/5 overflow-hidden" aria-label="Nosotros">
+            <div class="dot-grid" aria-hidden="true"></div>
+            <div class="aurora-blob blob-tl parallax-layer" data-speed="0.12" style="background: radial-gradient(circle, rgba(0,229,199,0.28), transparent 70%); opacity:0.5;" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 lg:gap-16 items-center relative z-10">
                 
                 <!-- CAROUSEL ABOUT -->
                 <div class="relative group reveal tilt-container">
@@ -634,8 +710,11 @@
         </section>
 
         <!-- ======================== SERVICIOS ======================== -->
-        <section id="servicios" class="py-16 sm:py-24 bg-navy relative border-t border-white/5" aria-label="Servicios">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <section id="servicios" class="py-16 sm:py-24 bg-navy relative border-t border-white/5 overflow-hidden" aria-label="Servicios">
+            <div class="dot-grid" aria-hidden="true"></div>
+            <div class="aurora-blob blob-br parallax-layer" data-speed="0.1" style="background: radial-gradient(circle, rgba(124,108,255,0.30), transparent 70%); opacity:0.45;" aria-hidden="true"></div>
+            <div class="spotlight" id="servicios-spotlight" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-16 gap-4 sm:gap-6 reveal">
                     <div class="max-w-2xl">
                         <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Lo que hacemos</h2>
@@ -648,7 +727,7 @@
                     <!-- Fotografía -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors">
                             <i data-lucide="camera" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Fotografía</h4>
@@ -658,7 +737,7 @@
                     <!-- Video & Reels -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal" style="transition-delay:60ms">
                         <div class="tilt-glow"></div>
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-coral group-hover:bg-coral group-hover:text-white transition-colors">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-coral group-hover:bg-coral group-hover:text-white transition-colors">
                             <i data-lucide="clapperboard" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Video & Reels</h4>
@@ -668,7 +747,7 @@
                     <!-- Gestion de Redes Sociales -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal" style="transition-delay:120ms">
                         <div class="tilt-glow"></div>
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-turquoise group-hover:bg-turquoise group-hover:text-navy transition-colors">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-turquoise group-hover:bg-turquoise group-hover:text-navy transition-colors">
                             <i data-lucide="users" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Gestión de Redes Sociales</h4>
@@ -678,7 +757,7 @@
                     <!-- Meta Ads -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-green-400 group-hover:bg-green-400 group-hover:text-navy transition-colors">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-green-400 group-hover:bg-green-400 group-hover:text-navy transition-colors">
                             <i data-lucide="crosshair" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Meta Ads</h4>
@@ -688,7 +767,7 @@
                     <!-- Branding -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal" style="transition-delay:60ms">
                         <div class="tilt-glow"></div>
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-twilight group-hover:bg-twilight group-hover:text-white transition-colors">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-twilight group-hover:bg-twilight group-hover:text-white transition-colors">
                             <i data-lucide="pen-tool" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Branding</h4>
@@ -698,7 +777,7 @@
                     <!-- Desarrollo Web -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal" style="transition-delay:120ms">
                         <div class="tilt-glow"></div>
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-orange-400 group-hover:bg-orange-400 group-hover:text-white transition-colors">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-orange-400 group-hover:bg-orange-400 group-hover:text-white transition-colors">
                             <i data-lucide="monitor-smartphone" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Desarrollo Web</h4>
@@ -722,8 +801,10 @@
         </section>
 
         <!-- ======================== METODOLOGÍA ======================== -->
-        <section id="metodologia" class="py-16 sm:py-24 bg-darker relative border-t border-white/5" aria-label="Proceso">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <section id="metodologia" class="py-16 sm:py-24 bg-darker relative border-t border-white/5 overflow-hidden" aria-label="Proceso">
+            <div class="dot-grid" aria-hidden="true"></div>
+            <div class="aurora-blob blob-mid parallax-layer" data-speed="0.08" style="background: radial-gradient(circle, rgba(255,214,0,0.22), transparent 70%); opacity:0.5;" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
                 <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
                     <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-3 sm:mb-4">Metodología de Trabajo</h2>
                     <h3 class="text-3xl sm:text-4xl md:text-5xl font-black reveal">Nuestro proceso en 4 pasos</h3>
@@ -733,22 +814,22 @@
                     <!-- Connector line desktop -->
                     <div class="hidden md:block absolute top-8 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-brandyellow via-turquoise to-brandyellow bg-[length:200%_auto] opacity-30 z-0" style="animation: shine 6s linear infinite;" aria-hidden="true"></div>
 
-                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal" style="transition-delay:0ms">
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal step-perspective" style="transition-delay:0ms">
                         <div class="step-node w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-lg sm:text-xl font-black text-brandyellow shadow-[0_0_20px_rgba(255,214,0,0.2)]">1</div>
                         <h4 class="font-bold text-lg sm:text-xl">Diagnóstico</h4>
                         <p class="text-xs sm:text-sm text-gray-400 font-light">Analizamos tu negocio, competencia local y presencia digital actual. En 30 minutos sabemos exactamente qué contenido necesitas, qué está fallando y definimos costos.</p>
                     </div>
-                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal" style="transition-delay:100ms">
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal step-perspective" style="transition-delay:100ms">
                         <div class="step-node w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-lg sm:text-xl font-black text-brandyellow shadow-[0_0_20px_rgba(255,214,0,0.2)]">2</div>
                         <h4 class="font-bold text-lg sm:text-xl">Propuesta</h4>
                         <p class="text-xs sm:text-sm text-gray-400 font-light">Te entregamos un plan de contenido con fechas, formatos, plataformas, copys, referencias. Ves exactamente qué vas a recibir de manera transparente.</p>
                     </div>
-                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal" style="transition-delay:200ms">
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal step-perspective" style="transition-delay:200ms">
                         <div class="step-node w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-lg sm:text-xl font-black text-brandyellow shadow-[0_0_20px_rgba(255,214,0,0.2)]">3</div>
                         <h4 class="font-bold text-lg sm:text-xl">Producción</h4>
                         <p class="text-xs sm:text-sm text-gray-400 font-light">Llegamos a tu negocio, filmamos, fotografiamos y editamos. Ejecutamos cada sesión o campaña publicitaria con todo listo.</p>
                     </div>
-                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal" style="transition-delay:300ms">
+                    <div class="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4 reveal step-perspective" style="transition-delay:300ms">
                         <div class="step-node w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-navy border-2 border-brandyellow flex items-center justify-center text-lg sm:text-xl font-black text-brandyellow shadow-[0_0_20px_rgba(255,214,0,0.2)]">4</div>
                         <h4 class="font-bold text-lg sm:text-xl">Entrega</h4>
                         <p class="text-xs sm:text-sm text-gray-400 font-light"> Programamos tu contenido, activamos tu campañas y al cierre del mes te entregamos métricas reales para definir la estrategia del siguiente.</p>
@@ -758,8 +839,10 @@
         </section>
 
         <!-- ======================== TRABAJOS (CARRUSEL) ======================== -->
-        <section id="trabajos" class="py-16 sm:py-24 bg-navy relative border-t border-white/5" aria-label="Casos de éxito">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <section id="trabajos" class="py-16 sm:py-24 bg-navy relative border-t border-white/5 overflow-hidden" aria-label="Casos de éxito">
+            <div class="dot-grid" aria-hidden="true"></div>
+            <div class="aurora-blob blob-tl parallax-layer" data-speed="0.1" style="background: radial-gradient(circle, rgba(255,111,94,0.25), transparent 70%); opacity:0.45;" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
                 <!-- Header con Botones de Navegación -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 sm:mb-16 gap-4 reveal">
                     <div>
@@ -912,11 +995,13 @@
 
         <!-- ======================== CTA FINAL ======================== -->
         <section id="contacto" class="py-16 sm:py-24 relative overflow-hidden bg-bluemid/10" aria-label="Contacto">
+            <div class="absolute inset-0 mesh-animated" aria-hidden="true"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-navy/80" aria-hidden="true"></div>
             <div class="aurora-layer" aria-hidden="true">
                 <div class="aurora-blob aurora-blob-1" style="opacity:0.35;"></div>
                 <div class="aurora-blob aurora-blob-2" style="opacity:0.3;"></div>
             </div>
+            <div class="spotlight" id="contacto-spotlight" aria-hidden="true"></div>
             <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-center flex flex-col items-center gap-6 sm:gap-8 reveal">
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-black">Llevemos tu marca al siguiente nivel </h2>
                 <p class="text-lg sm:text-xl text-gray-300 font-light max-w-2xl">Agenda una conversación con nosotros y descubre cómo podemos impulsar tu marca.</p>
@@ -947,8 +1032,9 @@
     </main>
 
     <!-- ======================== FOOTER ======================== -->
-    <footer class="relative bg-navy pt-12 sm:pt-16 pb-6 sm:pb-8" style="border-top:1px solid transparent; background-image: linear-gradient(#0D1B2E,#0D1B2E), linear-gradient(90deg, rgba(255,214,0,0.4), rgba(0,229,199,0.4), rgba(255,111,94,0.4)); background-origin: border-box; background-clip: padding-box, border-box;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12">
+    <footer class="relative bg-navy pt-12 sm:pt-16 pb-6 sm:pb-8 overflow-hidden footer-glow-border" style="border-top:1px solid transparent; background-image: linear-gradient(#0D1B2E,#0D1B2E), linear-gradient(90deg, rgba(255,214,0,0.4), rgba(0,229,199,0.4), rgba(255,111,94,0.4), rgba(255,214,0,0.4)); background-origin: border-box; background-clip: padding-box, border-box;">
+        <div class="aurora-blob blob-mid parallax-layer" data-speed="0.06" style="top:-25%; background: radial-gradient(circle, rgba(0,229,199,0.16), transparent 70%); opacity:0.4;" aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12 relative z-10">
             <div class="sm:col-span-2">
                 <a href="#" aria-label="R3C Creative Studio – ir al inicio">
                     <img src="Img/Logo_Renov.jpeg"
@@ -1087,16 +1173,24 @@
             });
         }
 
-        // 6. Hero spotlight follows cursor ────────────────────────────
-        const heroSection = document.getElementById('hero-section');
-        const heroSpotlight = document.getElementById('hero-spotlight');
-        if (heroSection && heroSpotlight && !isCoarsePointer) {
-            heroSection.addEventListener('mousemove', (e) => {
-                const rect = heroSection.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                heroSpotlight.style.setProperty('--x', `${x}%`);
-                heroSpotlight.style.setProperty('--y', `${y}%`);
+        // 6. Spotlight que sigue el cursor (Hero + Servicios + Contacto) ──
+        const spotlightPairs = [
+            ['hero-section', 'hero-spotlight'],
+            ['servicios', 'servicios-spotlight'],
+            ['contacto', 'contacto-spotlight'],
+        ];
+        if (!isCoarsePointer) {
+            spotlightPairs.forEach(([sectionId, glowId]) => {
+                const section = document.getElementById(sectionId);
+                const glow = document.getElementById(glowId);
+                if (!section || !glow) return;
+                section.addEventListener('mousemove', (e) => {
+                    const rect = section.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    glow.style.setProperty('--x', `${x}%`);
+                    glow.style.setProperty('--y', `${y}%`);
+                });
             });
         }
 
@@ -1130,6 +1224,29 @@
             } else {
                 counters.forEach(animateCounter);
             }
+        }
+
+        // 8. Parallax de fondo al hacer scroll (profundidad 3D) ──────────
+        const parallaxEls = document.querySelectorAll('.parallax-layer');
+        if (parallaxEls.length && !prefersReducedMotion) {
+            let parallaxTicking = false;
+            function updateParallax() {
+                const vh = window.innerHeight;
+                parallaxEls.forEach(el => {
+                    const speed = parseFloat(el.dataset.speed || '0.1');
+                    const rect = el.getBoundingClientRect();
+                    const centerDelta = (rect.top + rect.height / 2) - vh / 2;
+                    el.style.transform = `translateY(${centerDelta * speed * -0.2}px)`;
+                });
+                parallaxTicking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!parallaxTicking) {
+                    requestAnimationFrame(updateParallax);
+                    parallaxTicking = true;
+                }
+            }, { passive: true });
+            updateParallax();
         }
 
         // ── CAROUSEL ABOUT (Sección Nosotros) ───────────────────────────
