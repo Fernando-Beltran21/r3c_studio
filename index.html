@@ -192,8 +192,6 @@
             </div>
             <div class="spotlight" id="hero-spotlight" aria-hidden="true"></div>
 
-            <!-- Particles Canvas -->
-            <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-2 gap-10 lg:gap-16 items-center relative z-10">
                 <!-- Text -->
@@ -252,7 +250,7 @@
                 <div class="relative group reveal tilt-container">
                     <div class="aspect-square bg-gradient-to-br from-bluemid/30 via-turquoise/10 to-transparent rounded-full blur-3xl absolute -inset-4 z-0 pointer-events-none" aria-hidden="true"></div>
 
-                    <div id="carousel-wrapper" class="relative z-10 tilt-card gradient-border">
+                    <div id="carousel-wrapper" class="normal-card">
                         <div id="carousel-track">
                             <div class="carousel-slide" role="group" aria-label="Slide 1 de 6">
                                 <img src="img/rod.png" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80'" alt="Equipo R3C Creative Studio – sesión de trabajo" width="800" height="560" loading="lazy" decoding="async" />
@@ -296,7 +294,7 @@
                 <!-- Text -->
                 <div class="flex flex-col gap-5 pt-4 md:pt-0 reveal" style="transition-delay:100ms">
                     <h2 class="text-brandyellow font-bold uppercase tracking-widest text-xs sm:text-sm">NOSOTROS</h2>
-                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">Venimos a revolucionar la creación de <span class="text-transparent bg-clip-text bg-gradient-to-r from-turquoise to-brandyellow">contenido</span>.</h3>
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">Venimos a revolucionar la creación de <span class="gradient-text-anim2">contenido</span>.</h3>
                     <div class="text-gray-400 text-base sm:text-lg font-light leading-relaxed flex flex-col gap-4">
                         <p><strong class="text-white">R3C</strong> es un estudio creativo que ayuda a las marcas a crecer a través de estrategia, contenido y soluciones digitales.</p>
                         <p>Nos involucramos en cada proyecto para entender sus objetivos y desarrollar acciones que generen impacto real.</p>
@@ -324,7 +322,7 @@
                     <!-- Fotografía -->
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
-                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors float-anim">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors float-anim-delay">
                             <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" /> <circle cx="12" cy="13" r="3" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Fotografía</h4>
@@ -332,7 +330,7 @@
                     </article>
 
                     <!-- Video & Reels -->
-                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:60ms">
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-coral group-hover:bg-coral group-hover:text-white transition-colors float-anim-delay">
                             <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.296 3.464 3.02 3.956" /> <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" /> <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <path d="m6.18 5.276 3.1 3.899" /></svg>
@@ -342,9 +340,9 @@
                     </article>
 
                     <!-- Gestión de Redes Sociales -->
-                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:120ms">
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
-                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-turquoise group-hover:bg-turquoise group-hover:text-navy transition-colors float-anim">
+                        <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-turquoise group-hover:bg-turquoise group-hover:text-navy transition-colors float-anim-delay">
                             <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Gestión de Redes Sociales</h4>
@@ -362,7 +360,7 @@
                     </article>
 
                     <!-- Branding -->
-                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:60ms">
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-twilight group-hover:bg-twilight group-hover:text-white transition-colors float-anim">
                             <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z" /> <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18" /> <path d="m2.3 2.3 7.286 7.286" /> <circle cx="11" cy="11" r="2" /></svg>
@@ -372,7 +370,7 @@
                     </article>
 
                     <!-- Desarrollo Web -->
-                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:120ms">
+                    <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-orange-400 group-hover:bg-orange-400 group-hover:text-white transition-colors float-anim-delay">
                             <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" /> <path d="M10 19v-3.96 3.15" /> <path d="M7 19h5" /> <rect width="6" height="10" x="16" y="12" rx="2" /></svg>
@@ -453,9 +451,9 @@
                     </div>
                 </div>
 
-                <div id="trabajos-carousel" class="flex overflow-x-auto gap-6 sm:gap-8 snap-x snap-mandatory hide-scrollbar pb-8 cursor-grab select-none tilt-container" style="scroll-behavior: smooth;">
+                <div id="trabajos-carousel" class="flex overflow-x-auto gap-6 sm:gap-8 snap-x snap-mandatory hide-scrollbar pb-8 cursor-grab select-none tilt-container2" style="scroll-behavior: smooth;">
 
-                    <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
+                    <article class="normal-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
                         <img src="img/De-negocio-local-a-marca-reconocida.JPG" draggable="false" alt="Zarandisky - Restaurante" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
@@ -471,7 +469,7 @@
                         </div>
                     </article>
 
-                    <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
+                    <article class="normal-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
                         <img src="img/campana-digital.png" draggable="false" alt="Campaña Digital" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
@@ -487,7 +485,7 @@
                         </div>
                     </article>
 
-                    <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
+                    <article class="normal-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
                         <img src="img/eventos-premium.png" draggable="false" alt="Eventos Premium" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
@@ -503,7 +501,7 @@
                         </div>
                     </article>
 
-                    <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
+                    <article class="normal-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
                         <img src="img/desarrollo-web.png" draggable="false" alt="Desarrollo Web" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
@@ -518,7 +516,6 @@
                             </div>
                         </div>
                     </article>
-
                 </div>
 
                 <!-- Clientes -->

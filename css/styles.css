@@ -30,7 +30,7 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* ===== HERO GRADIENT ===== */
+/* ===== HERO GRADIENT===== */
 .hero-gradient {
     background: radial-gradient(circle at top right, rgba(26, 74, 138, 0.35), transparent 50%),
         radial-gradient(circle at bottom left, rgba(255, 214, 0, 0.1), transparent 40%),
@@ -127,15 +127,35 @@
     color: transparent;
     animation: shine 6s linear infinite;
 }
+.gradient-text-anim2 {
+    background: linear-gradient(90deg, #FFD600, #eaff31, #FFD600);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 6s linear infinite;
+}
 @keyframes shine {
     to {
         background-position: 200% center;
     }
 }
 
+/* ===== NORMAL CARD WITHOUT TILT ===== */
+.normal-card {
+    transition: box-shadow 0.3s ease;
+}
+.normal-card:hover {
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.55);
+}
+
+
 /* ===== TILT / 3D ===== */
 .tilt-container {
     perspective: 1200px;
+}
+.tilt-container2 {
+    perspective: 9600px;
 }
 .tilt-card {
     transform-style: preserve-3d;
@@ -534,7 +554,7 @@ body {
     top: 0;
     left: 0;
     height: 3px;
-    background: linear-gradient(90deg, #FFD600, #00E5C7, #FF6F5E);
+    background: linear-gradient(90deg, #FFD600, #ffff18, #ffff60);
     z-index: 100;
     width: 0%;
     transition: width 0.1s linear;
@@ -577,15 +597,6 @@ body {
     }
 }
 
-/* ===== CONFETTI / PARTICLES (hero) ===== */
-#particles-canvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    width: 100%;
-    height: 100%;
-}
 
 /* ===== BOTÓN CON EFECTO SHAKE ===== */
 .btn-shake:hover {
