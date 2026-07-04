@@ -1,0 +1,13 @@
+{
+  "name": "r3c-creative-studio",
+  "version": "1.0.0",
+  "description": "Sitio web de R3C Creative Studio",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./css/tailwind-src.css -o ./css/tailwind.min.css --minify",
+    "watch:css": "tailwindcss -i ./css/tailwind-src.css -o ./css/tailwind.min.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

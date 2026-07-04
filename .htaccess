@@ -1,0 +1,62 @@
+# =============================================================================
+# R3C Creative Studio — Configuración de producción para Apache (Hostinger)
+# =============================================================================
+
+# ---- 1) Forzar HTTPS siempre ----
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- 2) Página de error 404 personalizada ----
+ErrorDocument 404 /404.html
+
+# ---- 3) Cabeceras de seguridad ----
+<IfModule mod_headers.c>
+    # Evita que el navegador "adivine" el tipo de contenido (mitiga ataques MIME-sniffing)
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Evita que el sitio sea embebido en un <iframe> de otro dominio (clickjacking)
+    Header always set X-Frame-Options "DENY"
+
+    # Limita cuánta información de referencia se envía a otros sitios
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Desactiva APIs del navegador que este sitio no necesita
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+    # Fuerza HTTPS en el navegador durante 2 años (actívalo solo cuando el SSL
+    # ya esté funcionando de forma estable en todo el sitio)
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+    # Content-Security-Policy: solo permite cargar recursos desde el propio
+    # sitio y las fuentes de Google. Ya no hay dependencias de CDNs externos
+    # (Tailwind y los íconos ahora están compilados/auto-hospedados).
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://placehold.co; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+</IfModule>
+
+# ---- 4) Compresión (Gzip/Brotli) ----
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# ---- 5) Caché del navegador para archivos estáticos ----
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 6 months"
+    ExpiresByType image/jpeg "access plus 6 months"
+    ExpiresByType image/svg+xml "access plus 6 months"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# ---- 6) Evitar que se liste el contenido de las carpetas ----
+Options -Indexes
+
+# ---- 7) Bloquear el acceso a archivos de configuración/build que no deben
+#         subirse a producción, por si alguien los sube por error ----
+<FilesMatch "^(package\.json|package-lock\.json|tailwind\.config\.js|\.env|\.gitignore)$">
+    Require all denied
+</FilesMatch>

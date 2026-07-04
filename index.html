@@ -6,708 +6,68 @@
     <title>R3C Creative Studio | Agencia de Contenido y Marketing en Playa del Carmen</title>
     <meta name="description" content="Estudio creativo en Playa del Carmen para negocios locales. Fotografía, Video, Drone, Meta Ads y Branding con resultados reales." />
 
+    <!-- ⚠️ TODO: reemplaza este dominio por el real una vez que lo tengas registrado -->
+    <link rel="canonical" href="https://www.r3ccreativestudio.com/" />
+    <meta name="theme-color" content="#0D1B2E" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook / WhatsApp preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:url" content="https://www.r3ccreativestudio.com/" />
+    <meta property="og:site_name" content="R3C Creative Studio" />
+    <meta property="og:title" content="R3C Creative Studio | Agencia de Contenido y Marketing en Playa del Carmen" />
+    <meta property="og:description" content="Estudio creativo en Playa del Carmen para negocios locales. Fotografía, Video, Drone, Meta Ads y Branding con resultados reales." />
+    <meta property="og:image" content="https://www.r3ccreativestudio.com/img/portada-1.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="R3C Creative Studio | Agencia de Contenido y Marketing en Playa del Carmen" />
+    <meta name="twitter:description" content="Estudio creativo en Playa del Carmen para negocios locales. Fotografía, Video, Drone, Meta Ads y Branding con resultados reales." />
+    <meta name="twitter:image" content="https://www.r3ccreativestudio.com/img/portada-1.png" />
+
+    <!-- Favicons (ver guía de implementación para generarlos a partir del logo real) -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <!-- Datos estructurados para SEO local (Google) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "R3C Creative Studio",
+        "image": "https://www.r3ccreativestudio.com/img/portada-1.png",
+        "url": "https://www.r3ccreativestudio.com/",
+        "telephone": "+52-984-211-0363",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Playa del Carmen",
+            "addressRegion": "Quintana Roo",
+            "addressCountry": "MX"
+        },
+        "sameAs": [
+            "https://www.instagram.com/r3c.studio/",
+            "https://www.tiktok.com/@r3c.studio"
+        ]
+    }
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Bricolage+Grotesque:opsz,wght@12..96,400..900&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: '#0D1B2E',
-                        bluemid: '#1A4A8A',
-                        brandyellow: '#FFD600',
-                        brandyellowHover: '#E6C200',
-                        darker: '#08111D',
-                        turquoise: '#00E5C7',
-                        coral: '#FF6F5E',
-                        twilight: '#7C6CFF',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['"Bricolage Grotesque"', 'sans-serif'],
-                    },
-                },
-            },
-        };
-    </script>
+    <!-- Tailwind CSS (compilado y purgado para producción, ver tailwind.config.js) -->
+    <link rel="stylesheet" href="css/tailwind.min.css" />
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Estilos propios -->
+    <link rel="stylesheet" href="css/styles.css" />
 
-    <style>
-        /* ===== BASE ===== */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0D1B2E;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, rgba(255, 214, 0, 0.5), rgba(0, 229, 199, 0.4));
-            border-radius: 3px;
-        }
-
-        /* ===== GLASS ===== */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* ===== HERO GRADIENT ===== */
-        .hero-gradient {
-            background: radial-gradient(circle at top right, rgba(26, 74, 138, 0.35), transparent 50%),
-                radial-gradient(circle at bottom left, rgba(255, 214, 0, 0.1), transparent 40%),
-                radial-gradient(circle at 50% 100%, rgba(0, 229, 199, 0.08), transparent 45%);
-        }
-
-        /* ===== AURORA ===== */
-        .aurora-layer {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .aurora-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.55;
-            will-change: transform;
-            mix-blend-mode: screen;
-        }
-        .aurora-blob-1 {
-            width: 42vw;
-            height: 42vw;
-            max-width: 640px;
-            max-height: 640px;
-            top: -12%;
-            right: -8%;
-            background: radial-gradient(circle, rgba(0, 229, 199, 0.55), transparent 70%);
-            animation: driftA 26s ease-in-out infinite alternate;
-        }
-        .aurora-blob-2 {
-            width: 34vw;
-            height: 34vw;
-            max-width: 520px;
-            max-height: 520px;
-            bottom: -14%;
-            left: -6%;
-            background: radial-gradient(circle, rgba(255, 214, 0, 0.35), transparent 70%);
-            animation: driftB 32s ease-in-out infinite alternate;
-        }
-        .aurora-blob-3 {
-            width: 28vw;
-            height: 28vw;
-            max-width: 420px;
-            max-height: 420px;
-            top: 30%;
-            left: 40%;
-            background: radial-gradient(circle, rgba(124, 108, 255, 0.30), transparent 70%);
-            animation: driftC 22s ease-in-out infinite alternate;
-        }
-        @keyframes driftA {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                transform: translate(-6%, 8%) scale(1.15);
-            }
-        }
-        @keyframes driftB {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                transform: translate(8%, -6%) scale(1.1);
-            }
-        }
-        @keyframes driftC {
-            0% {
-                transform: translate(0, 0) scale(0.9);
-            }
-            100% {
-                transform: translate(-10%, -10%) scale(1.2);
-            }
-        }
-
-        /* ===== SPOTLIGHT ===== */
-        .spotlight {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            background: radial-gradient(600px circle at var(--x, 50%) var(--y, 30%), rgba(255, 214, 0, 0.10), transparent 60%);
-            transition: background 0.2s ease;
-        }
-
-        /* ===== GRADIENT TEXT ANIM ===== */
-        .gradient-text-anim {
-            background: linear-gradient(90deg, #FFD600, #00E5C7, #FFD600);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: shine 6s linear infinite;
-        }
-        @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
-        }
-
-        /* ===== TILT / 3D ===== */
-        .tilt-container {
-            perspective: 1200px;
-        }
-        .tilt-card {
-            transform-style: preserve-3d;
-            transition: transform 0.15s ease-out, box-shadow 0.3s ease;
-            will-change: transform;
-        }
-        .tilt-card>* {
-            transform: translateZ(0);
-        }
-        .tilt-glow {
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 214, 0, 0.18), transparent 65%);
-            pointer-events: none;
-            z-index: 1;
-        }
-        .tilt-card:hover .tilt-glow {
-            opacity: 1;
-        }
-        @media (max-width: 767px) {
-            .tilt-card {
-                transform: none !important;
-            }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .tilt-card {
-                transform: none !important;
-                transition: none;
-            }
-        }
-
-        /* ===== SCROLL REVEAL ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(36px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-stagger.revealed {
-            transition-delay: var(--delay, 0ms);
-        }
-
-        /* ===== REVEAL WITH SCALE ===== */
-        .reveal-scale {
-            opacity: 0;
-            transform: scale(0.85) translateY(30px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-scale.revealed {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-
-        /* ===== REVEAL ROTATE ===== */
-        .reveal-rotate {
-            opacity: 0;
-            transform: rotateY(-15deg) translateX(-30px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-rotate.revealed {
-            opacity: 1;
-            transform: rotateY(0) translateX(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .reveal,
-            .reveal-scale,
-            .reveal-rotate {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-        }
-
-        /* ===== FLOATING ===== */
-        .float-anim {
-            animation: levitate 5s ease-in-out infinite;
-        }
-        .float-anim-delay {
-            animation: levitate 5s ease-in-out infinite;
-            animation-delay: 1.2s;
-        }
-        @keyframes levitate {
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-10px) rotate(-1deg);
-            }
-        }
-        @media (prefers-reduced-motion: reduce) {
-
-            .float-anim,
-            .float-anim-delay {
-                animation: none;
-            }
-        }
-
-        /* ===== MARQUEE ===== */
-        .marquee-mask {
-            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-            overflow: hidden;
-        }
-        .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: marquee 28s linear infinite;
-        }
-        .marquee-track:hover {
-            animation-play-state: paused;
-        }
-        @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* ===== HERO IMAGE BOX ===== */
-        .hero-image-box {
-            position: relative;
-            width: 80%;
-            aspect-ratio: 4/5;
-            max-height: 700px;
-            overflow: hidden;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #08111D;
-            transform-style: preserve-3d;
-            transition: transform 0.2s ease-out;
-        }
-        .hero-image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            opacity: 0.7;
-        }
-
-        /* ===== NAVBAR ===== */
-        #navbar {
-            transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-        }
-        #navbar.scrolled {
-            background: rgba(8, 17, 29, 0.96);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(0, 229, 199, 0.15);
-        }
-        .nav-link {
-            position: relative;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #FFD600;
-            border-radius: 1px;
-            transition: width 0.25s ease;
-        }
-        .nav-link:hover {
-            color: #fff;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        /* ===== HAMBURGER ===== */
-        .hamburger-line {
-            transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
-        }
-        #mobile-menu-btn.open .hamburger-line:nth-child(1) {
-            transform: translateY(8px) rotate(45deg);
-        }
-        #mobile-menu-btn.open .hamburger-line:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        #mobile-menu-btn.open .hamburger-line:nth-child(3) {
-            transform: translateY(-8px) rotate(-45deg);
-            width: 1.5rem;
-        }
-
-        /* ===== MOBILE MENU ===== */
-        #mobile-menu {
-            transform: translateY(-100%);
-            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
-        #mobile-menu.open {
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        .mobile-nav-link {
-            opacity: 0;
-            transform: translateY(18px);
-            transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
-        }
-        #mobile-menu.open .mobile-nav-link:nth-child(1) {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.12s;
-        }
-        #mobile-menu.open .mobile-nav-link:nth-child(2) {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.19s;
-        }
-        #mobile-menu.open .mobile-nav-link:nth-child(3) {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.26s;
-        }
-        #mobile-menu.open .mobile-nav-link:nth-child(4) {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.33s;
-        }
-
-        /* ===== FLOATING WHATSAPP ===== */
-        #float-wa {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            animation: waPulse 2.4s ease-in-out infinite;
-        }
-        #float-wa:hover {
-            transform: scale(1.08);
-        }
-        @keyframes waPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
-            }
-        }
-
-        /* ===== NOISE OVERLAY ===== */
-        .noise-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 45;
-            pointer-events: none;
-            opacity: 0.035;
-            mix-blend-mode: overlay;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        /* ===== DOT GRID ===== */
-        .dot-grid {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
-            background-size: 26px 26px;
-            -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
-            mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
-        }
-
-        /* ===== BLOBS REUTILIZABLES ===== */
-        .blob-tl {
-            top: -10%;
-            left: -8%;
-            width: 32vw;
-            height: 32vw;
-            max-width: 480px;
-            max-height: 480px;
-            animation: driftA 28s ease-in-out infinite alternate;
-        }
-        .blob-br {
-            bottom: -12%;
-            right: -8%;
-            width: 30vw;
-            height: 30vw;
-            max-width: 460px;
-            max-height: 460px;
-            animation: driftB 30s ease-in-out infinite alternate;
-        }
-        .blob-mid {
-            top: 15%;
-            left: 55%;
-            width: 24vw;
-            height: 24vw;
-            max-width: 380px;
-            max-height: 380px;
-            animation: driftC 24s ease-in-out infinite alternate;
-        }
-
-        /* ===== PARALLAX ===== */
-        .parallax-layer {
-            will-change: transform;
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .parallax-layer {
-                transform: none !important;
-            }
-        }
-
-        /* ===== ICON 3D ===== */
-        .icon-3d {
-            transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
-        }
-        .group:hover .icon-3d {
-            transform: translateZ(46px) scale(1.08) rotate(-4deg);
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.55);
-        }
-
-        /* ===== CAROUSEL ABOUT ===== */
-        #carousel-track {
-            display: flex;
-            will-change: transform;
-            transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1);
-        }
-        .carousel-slide {
-            flex: 0 0 100%;
-            width: 100%;
-            min-width: 0;
-        }
-        .carousel-slide img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        #carousel-wrapper {
-            position: relative;
-            overflow: hidden;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            height: 560px;
-        }
-        @media (max-width: 768px) {
-            #carousel-wrapper {
-                height: 320px;
-            }
-        }
-
-        /* ===== TRABAJOS CARRUSEL ===== */
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* ===== CURSOR PERSONALIZADO ===== */
-        .custom-cursor {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 214, 0, 0.25);
-            backdrop-filter: blur(1px);
-            border: 1.5px solid rgba(255, 214, 0, 0.5);
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
-            will-change: transform;
-            display: none;
-        }
-        .custom-cursor.active {
-            display: block;
-        }
-        .custom-cursor.hover {
-            width: 18px;
-            height: 18px;
-            background: rgba(255, 214, 0, 0.08);
-            border-color: rgba(255, 213, 0, 0.8);
-        }
-        /* ===== Eliminar cursor predeterminado ===== */
-        body {
-            cursor: none;
-        }
-
-        /* ===== SCROLL PROGRESS BAR ===== */
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #FFD600, #00E5C7, #FF6F5E);
-            z-index: 100;
-            width: 0%;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 12px rgba(255, 214, 0, 0.3);
-        }
-
-        /* ===== ANIMATED GRADIENT BORDER (cards) ===== */
-        .gradient-border {
-            position: relative;
-            border-radius: 1.5rem;
-            background-clip: padding-box;
-            border: 1px solid transparent;
-        }
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(255, 214, 0, 0.4), rgba(0, 229, 199, 0.4), rgba(255, 111, 94, 0.4), rgba(255, 214, 0, 0.4));
-            background-size: 300% 300%;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            animation: borderFlow 6s ease-in-out infinite alternate;
-        }
-        @keyframes borderFlow {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .gradient-border::before {
-                animation: none;
-            }
-        }
-
-        /* ===== CONFETTI / PARTICLES (hero) ===== */
-        #particles-canvas {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* ===== BOTÓN CON EFECTO SHAKE ===== */
-        .btn-shake:hover {
-            animation: shake 0.4s ease-in-out;
-        }
-        @keyframes shake {
-            0%,
-            100% {
-                transform: rotate(0deg);
-            }
-            20% {
-                transform: rotate(-4deg);
-            }
-            40% {
-                transform: rotate(4deg);
-            }
-            60% {
-                transform: rotate(-2deg);
-            }
-            80% {
-                transform: rotate(2deg);
-            }
-        }
-
-        /* ===== MESH ANIMATED ===== */
-        .mesh-animated {
-            background: radial-gradient(circle at 20% 20%, rgba(0, 229, 199, 0.18), transparent 45%),
-                radial-gradient(circle at 80% 30%, rgba(255, 214, 0, 0.14), transparent 45%),
-                radial-gradient(circle at 50% 90%, rgba(124, 108, 255, 0.16), transparent 50%);
-            background-size: 180% 180%;
-            animation: meshMove 18s ease-in-out infinite alternate;
-        }
-        @keyframes meshMove {
-            100% {
-                background-position: 100% 40%;
-            }
-        }
-
-        /* ===== FOOTER GLOW BORDER ===== */
-        @keyframes borderFlowFooter {
-            100% {
-                background-position: 0% 0%, 200% 0%;
-            }
-        }
-        .footer-glow-border {
-            background-size: 100% 100%, 200% 100%;
-            animation: borderFlowFooter 8s linear infinite;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1023px) {
-            .floating-badge {
-                display: none;
-            }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .aurora-blob,
-            .float-anim,
-            .float-anim-delay,
-            .marquee-track,
-            .gradient-text-anim,
-            .mesh-animated,
-            .footer-glow-border,
-            .gradient-border::before {
-                animation: none !important;
-            }
-            .custom-cursor {
-                display: none !important;
-            }
-            #scroll-progress {
-                display: none;
-            }
-            .tilt-card {
-                transform: none !important;
-                transition: none !important;
-            }
-            .reveal,
-            .reveal-scale,
-            .reveal-rotate {
-                opacity: 1;
-                transform: none !important;
-                transition: none !important;
-            }
-        }
-    </style>
 </head>
 <body class="bg-navy text-white font-sans antialiased overflow-x-hidden selection:bg-brandyellow selection:text-navy">
 
@@ -725,7 +85,7 @@
 
             <!-- Logo -->
             <a href="#" class="relative z-[60]" aria-label="R3C Creative Studio - Inicio">
-                <img src="Img/Logo_Renov.jpeg" onerror="this.src='https://placehold.co/150x150/0D1B2E/FFD600?text=R3C+Studio'" alt="R3C Creative Studio Logo" class="h-9 sm:h-10 w-auto rounded" width="150" height="150" />
+                <img src="favicon.svg" onerror="this.src='https://placehold.co/150x150/0D1B2E/FFD600?text=R3C+Studio'" alt="R3C Creative Studio Logo" class="h-9 sm:h-10 w-auto rounded" width="150" height="150" />
             </a>
 
             <!-- Desktop Nav -->
@@ -761,16 +121,16 @@
         </div>
         <nav class="flex flex-col gap-1 mt-4 relative z-10">
             <a href="#nosotros" class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-brandyellow hover:translate-x-2 py-3.5 border-b border-white/8 flex items-center justify-between group">
-                Nosotros <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+                Nosotros <svg class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
             </a>
             <a href="#servicios" class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-turquoise hover:translate-x-2 py-3.5 border-b border-white/8 flex items-center justify-between group">
-                Servicios <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+                Servicios <svg class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
             </a>
             <a href="#metodologia" class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-coral hover:translate-x-2 py-3.5 border-b border-white/8 flex items-center justify-between group">
-                Proceso <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+                Proceso <svg class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
             </a>
             <a href="#trabajos" class="mobile-nav-link text-[2.4rem] font-black text-white/75 hover:text-brandyellow hover:translate-x-2 py-3.5 flex items-center justify-between group">
-                Trabajos <i data-lucide="arrow-right" class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity"></i>
+                Trabajos <svg class="w-7 h-7 opacity-0 group-hover:opacity-60 transition-opacity" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
             </a>
         </nav>
         <div class="flex flex-col gap-5 mt-8 relative z-10">
@@ -788,14 +148,14 @@
     <aside class="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col" aria-label="Redes sociales">
         <div class="glass-panel p-2 rounded-2xl flex flex-col gap-2 shadow-2xl">
             <div class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 cursor-default transition-colors">
-                <i data-lucide="map-pin" class="w-5 h-5 text-brandyellow"></i>
+                <svg class="w-5 h-5 text-brandyellow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg>
                 <div class="absolute right-full mr-4 bg-white text-navy text-sm font-semibold px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
                     Playa del Carmen
                 </div>
             </div>
             <div class="w-8 h-[1px] bg-white/10 mx-auto"></div>
             <a href="https://api.whatsapp.com/send/?phone=9842110363&text=Hola%20R3C%20%F0%9F%91%8B%20Me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20c%C3%B3mo%20podemos%20trabajar%20juntos." target="_blank" rel="noopener" class="group relative flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-colors" aria-label="WhatsApp">
-                <i data-lucide="message-circle" class="w-5 h-5 text-green-400"></i>
+                <svg class="w-5 h-5 text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg>
                 <div class="absolute right-full mr-4 bg-white text-navy text-sm font-semibold px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl flex flex-col">
                     <span>WhatsApp</span><span class="font-normal text-gray-500">984 211 0363</span>
                 </div>
@@ -852,7 +212,7 @@
 
                     <div class="flex flex-col sm:flex-row gap-4 mt-2">
                         <a href="https://api.whatsapp.com/send/?phone=9842110363&text=Hola%20R3C%20%F0%9F%91%8B%20Me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20c%C3%B3mo%20podemos%20trabajar%20juntos." target="_blank" rel="noopener" class="bg-brandyellow text-navy px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-brandyellowHover hover:shadow-[0_0_40px_rgba(255,214,0,0.5)] hover:-translate-y-0.5 transition-all text-center flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,214,0,0.25)] btn-shake">
-                            Hablemos de tu proyecto <i data-lucide="arrow-right" class="w-5 h-5" aria-hidden="true"></i>
+                            Hablemos de tu proyecto <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                         </a>
                     </div>
 
@@ -876,7 +236,7 @@
                 <!-- Hero Image -->
                 <div class="relative hidden lg:block z-10 tilt-container reveal revealed" style="transition-delay:120ms">
                     <div class="hero-image-box tilt-card" id="hero-tilt">
-                        <img src="Img/Portada 1.png" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" alt="Producción audiovisual R3C Creative Studio" width="800" height="600" loading="lazy" />
+                        <img src="img/portada-1.png" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" alt="Producción audiovisual R3C Creative Studio" width="800" height="600" loading="lazy" />
                     </div>
                 </div>
             </div>
@@ -895,30 +255,30 @@
                     <div id="carousel-wrapper" class="relative z-10 tilt-card gradient-border">
                         <div id="carousel-track">
                             <div class="carousel-slide" role="group" aria-label="Slide 1 de 6">
-                                <img src="Img/Rod.png" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80'" alt="Equipo R3C Creative Studio – sesión de trabajo" width="800" height="560" loading="lazy" decoding="async" />
+                                <img src="img/rod.png" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80'" alt="Equipo R3C Creative Studio – sesión de trabajo" width="800" height="560" loading="lazy" decoding="async" />
                             </div>
                             <div class="carousel-slide" role="group" aria-label="Slide 2 de 6">
-                                <img src="Img/Ale.png" onerror="this.src='https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&q=80'" alt="Equipo R3C Creative Studio – producción de contenido" width="800" height="560" loading="lazy" decoding="async" />
+                                <img src="img/ale.png" onerror="this.src='https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&q=80'" alt="Equipo R3C Creative Studio – producción de contenido" width="800" height="560" loading="lazy" decoding="async" />
                             </div>
                             <div class="carousel-slide" role="group" aria-label="Slide 3 de 6">
-                                <img src="Img/Frida.png" onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80'" alt="Equipo R3C Creative Studio – reunión" width="800" height="560" loading="lazy" decoding="async" />
+                                <img src="img/frida.png" onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80'" alt="Equipo R3C Creative Studio – reunión" width="800" height="560" loading="lazy" decoding="async" />
                             </div>
                             <div class="carousel-slide" role="group" aria-label="Slide 4 de 6">
-                                <img src="Img/Fer.png" onerror="this.src='https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80'" alt="Producción en set R3C Creative Studio" width="800" height="560" loading="lazy" decoding="async" />
+                                <img src="img/fer.png" onerror="this.src='https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80'" alt="Producción en set R3C Creative Studio" width="800" height="560" loading="lazy" decoding="async" />
                             </div>
                             <div class="carousel-slide" role="group" aria-label="Slide 5 de 6">
-                                <img src="Img/Marisol.png" onerror="this.src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80'" alt="Edición y postproducción R3C Creative Studio" width="800" height="560" loading="lazy" decoding="async" />
+                                <img src="img/marisol.png" onerror="this.src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80'" alt="Edición y postproducción R3C Creative Studio" width="800" height="560" loading="lazy" decoding="async" />
                             </div>
                             <div class="carousel-slide" role="group" aria-label="Slide 6 de 6">
-                                <img src="Img/Marino.png" onerror="this.src='https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?w=800&q=80'" alt="Contenido finalizado R3C Creative Studio" width="800" height="560" loading="lazy" decoding="async" />
+                                <img src="img/marino.png" onerror="this.src='https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?w=800&q=80'" alt="Contenido finalizado R3C Creative Studio" width="800" height="560" loading="lazy" decoding="async" />
                             </div>
                         </div>
 
                         <button id="carousel-prev" aria-label="Imagen anterior" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brandyellow hover:text-navy text-white p-2.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brandyellow z-30 opacity-80 md:opacity-0 md:group-hover:opacity-100">
-                            <i data-lucide="chevron-left" class="w-5 h-5" aria-hidden="true"></i>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                         </button>
                         <button id="carousel-next" aria-label="Imagen siguiente" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-brandyellow hover:text-navy text-white p-2.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brandyellow z-30 opacity-80 md:opacity-0 md:group-hover:opacity-100">
-                            <i data-lucide="chevron-right" class="w-5 h-5" aria-hidden="true"></i>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                         </button>
 
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-30" role="tablist" aria-label="Controles del carrusel">
@@ -965,7 +325,7 @@
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-brandyellow group-hover:bg-brandyellow group-hover:text-navy transition-colors float-anim">
-                            <i data-lucide="camera" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" /> <circle cx="12" cy="13" r="3" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Fotografía</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Capturamos la identidad de tu negocio a través de imágenes que destacan su valor y generan una conexión auténtica.</p>
@@ -975,7 +335,7 @@
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:60ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-coral group-hover:bg-coral group-hover:text-white transition-colors float-anim-delay">
-                            <i data-lucide="clapperboard" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.296 3.464 3.02 3.956" /> <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" /> <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <path d="m6.18 5.276 3.1 3.899" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Video & Reels</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Contenido corto, dinámico y diseñado para captar atención y convertir en Instagram, TikTok y Facebook.</p>
@@ -985,7 +345,7 @@
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:120ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-turquoise group-hover:bg-turquoise group-hover:text-navy transition-colors float-anim">
-                            <i data-lucide="users" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Gestión de Redes Sociales</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Planificación, creación de contenido, publicación y seguimiento de contenido estratégico mensual</p>
@@ -995,7 +355,7 @@
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:0ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-green-400 group-hover:bg-green-400 group-hover:text-navy transition-colors float-anim-delay">
-                            <i data-lucide="crosshair" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="22" x2="18" y1="12" y2="12" /> <line x1="6" x2="2" y1="12" y2="12" /> <line x1="12" x2="12" y1="6" y2="2" /> <line x1="12" x2="12" y1="22" y2="18" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Meta Ads</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Anuncios estratégicos enfocados e atraer clientes potenciales y generar resultados medibles para incrementar tu alcance o ventas.</p>
@@ -1005,7 +365,7 @@
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:60ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-twilight group-hover:bg-twilight group-hover:text-white transition-colors float-anim">
-                            <i data-lucide="pen-tool" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z" /> <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18" /> <path d="m2.3 2.3 7.286 7.286" /> <circle cx="11" cy="11" r="2" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Branding</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Identidad visual coherente y memorable: logotipo, paleta de colores, tipografía y aplicaciones de marca.</p>
@@ -1015,7 +375,7 @@
                     <article class="glass-panel p-6 sm:p-8 rounded-3xl transition-all duration-300 card-hover tilt-card group border border-white/5 relative reveal-scale" style="transition-delay:120ms">
                         <div class="tilt-glow"></div>
                         <div class="icon-3d w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-5 sm:mb-6 text-orange-400 group-hover:bg-orange-400 group-hover:text-white transition-colors float-anim-delay">
-                            <i data-lucide="monitor-smartphone" class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true"></i>
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" /> <path d="M10 19v-3.96 3.15" /> <path d="M7 19h5" /> <rect width="6" height="10" x="16" y="12" rx="2" /></svg>
                         </div>
                         <h4 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Desarrollo Web</h4>
                         <p class="text-gray-400 text-sm leading-relaxed">Sitios web a medida, optimizados para móviles y pensados como herramienta de ventas 24/7.</p>
@@ -1028,7 +388,7 @@
                             <p class="text-gray-300 text-sm leading-relaxed">Plática gratuita para diagnosticar qué necesita tu negocio y cómo podemos resolverlo de forma efectiva.</p>
                         </div>
                         <a href="https://api.whatsapp.com/send/?phone=9842110363&text=Hola%20R3C%20%F0%9F%91%8B%20Me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20c%C3%B3mo%20podemos%20trabajar%20juntos." target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-navy px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors whitespace-nowrap flex-shrink-0 btn-shake">
-                            Agendar ahora <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
+                            Agendar ahora <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                         </a>
                     </div>
                 </div>
@@ -1085,10 +445,10 @@
                     </div>
                     <div class="flex gap-3">
                         <button id="btn-trabajos-prev" aria-label="Anterior proyecto" class="bg-white/10 hover:bg-brandyellow hover:text-navy text-white p-3 rounded-full transition-colors focus:outline-none">
-                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                         </button>
                         <button id="btn-trabajos-next" aria-label="Siguiente proyecto" class="bg-white/10 hover:bg-brandyellow hover:text-navy text-white p-3 rounded-full transition-colors focus:outline-none">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                         </button>
                     </div>
                 </div>
@@ -1096,7 +456,7 @@
                 <div id="trabajos-carousel" class="flex overflow-x-auto gap-6 sm:gap-8 snap-x snap-mandatory hide-scrollbar pb-8 cursor-grab select-none tilt-container" style="scroll-behavior: smooth;">
 
                     <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
-                        <img src="Img/De negocio local a marca reconocida.JPG" draggable="false" alt="Zarandisky - Restaurante" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
+                        <img src="img/De-negocio-local-a-marca-reconocida.JPG" draggable="false" alt="Zarandisky - Restaurante" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
                             <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">Negocio Local</div>
@@ -1112,7 +472,7 @@
                     </article>
 
                     <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
-                        <img src="Img/Campaña Digital.png" draggable="false" alt="Campaña Digital" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
+                        <img src="img/campana-digital.png" draggable="false" alt="Campaña Digital" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
                             <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">Campaña Digital</div>
@@ -1128,7 +488,7 @@
                     </article>
 
                     <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
-                        <img src="Img/Eventos Premium.png" draggable="false" alt="Eventos Premium" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
+                        <img src="img/eventos-premium.png" draggable="false" alt="Eventos Premium" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
                             <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">Eventos Premium</div>
@@ -1144,7 +504,7 @@
                     </article>
 
                     <article class="tilt-card relative rounded-3xl overflow-hidden group flex flex-col snap-start shrink-0 w-[85vw] sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1rem)] h-[500px] sm:h-[550px] shadow-2xl gradient-border">
-                        <img src="Img/Desarrolloweb.png" draggable="false" alt="Desarrollo Web" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
+                        <img src="img/desarrollo-web.png" draggable="false" alt="Desarrollo Web" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" />
                         <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/90 to-transparent opacity-90 z-10 pointer-events-none"></div>
                         <div class="absolute inset-0 z-20 flex flex-col p-6 sm:p-8">
                             <div class="self-start bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold border border-white/10 text-white mb-auto">Desarrollo Web</div>
@@ -1209,7 +569,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center mt-4 sm:mt-6">
                     <a href="https://api.whatsapp.com/send/?phone=9842110363&text=Hola%20R3C%20%F0%9F%91%8B%20Me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20c%C3%B3mo%20podemos%20trabajar%20juntos." target="_blank" rel="noopener" class="bg-green-500 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-green-600 hover:shadow-[0_0_40px_rgba(34,197,94,0.5)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/30 btn-shake">
-                        <i data-lucide="message-circle" class="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true"></i> 984 211 0363
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg> 984 211 0363
                     </a>
                 </div>
 
@@ -1237,7 +597,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12 relative z-10">
             <div class="sm:col-span-2">
                 <a href="#" aria-label="R3C Creative Studio – ir al inicio">
-                    <img src="Img/Logo_Renov.jpeg" onerror="this.src='https://placehold.co/150x50/0D1B2E/FFD600?text=R3C+Studio'" alt="R3C Creative Studio" class="h-9 sm:h-10 w-auto rounded" width="150" height="40" />
+                    <img src="favicon.svg" onerror="this.src='https://placehold.co/150x50/0D1B2E/FFD600?text=R3C+Studio'" alt="R3C Creative Studio" class="h-9 sm:h-10 w-auto rounded" width="150" height="40" />
                 </a>
                 <p class="text-gray-400 max-w-sm font-light mt-4 text-sm sm:text-base">
                     Estudio creativo en Playa del Carmen dedicado a elevar marcas a través de estrategia y contenido.
@@ -1258,10 +618,10 @@
                 <h4 class="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">Contacto</h4>
                 <ul class="flex flex-col gap-3 text-gray-400 text-sm sm:text-base">
                     <li class="flex items-center gap-2">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true"></i> Playa del Carmen, Q.R.
+                        <svg class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg> Playa del Carmen, Q.R.
                     </li>
                     <li class="flex items-center gap-2">
-                        <i data-lucide="phone" class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true"></i> 984 211 0363
+                        <svg class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg> 984 211 0363
                     </li>
                     <li class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-brandyellow flex-shrink-0" aria-hidden="true">
@@ -1282,397 +642,10 @@
 
     <!-- ======================== FLOATING WHATSAPP ======================== -->
     <a id="float-wa" href="https://api.whatsapp.com/send/?phone=9842110363&text=Hola%20R3C%20%F0%9F%91%8B%20Me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20c%C3%B3mo%20podemos%20trabajar%20juntos." target="_blank" rel="noopener" class="lg:hidden fixed bottom-6 right-4 z-30 bg-green-500 text-white p-4 rounded-full shadow-xl shadow-green-500/30" aria-label="Contactar por WhatsApp">
-        <i data-lucide="message-circle" class="w-6 h-6"></i>
+        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg>
     </a>
 
     <!-- ======================== SCRIPTS ======================== -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            // ── Lucide ──
-            lucide.createIcons();
-
-            // ── Mobile Menu ──
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            function openMenu() {
-                mobileMenuBtn.classList.add('open');
-                mobileMenu.classList.add('open');
-                mobileMenu.setAttribute('aria-hidden', 'false');
-                mobileMenuBtn.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeMenu() {
-                mobileMenuBtn.classList.remove('open');
-                mobileMenu.classList.remove('open');
-                mobileMenu.setAttribute('aria-hidden', 'true');
-                mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenuBtn.classList.contains('open') ? closeMenu() : openMenu();
-            });
-
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', closeMenu);
-            });
-
-            // ── Navbar scroll ──
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                navbar.classList.toggle('scrolled', window.scrollY > 20);
-            }, { passive: true });
-
-            // ── Scroll Progress ──
-            const progressBar = document.getElementById('scroll-progress');
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = (scrollTop / docHeight) * 100;
-                progressBar.style.width = progress + '%';
-            }, { passive: true });
-
-            // ── Custom Cursor ──
-            const cursor = document.getElementById('custom-cursor');
-            const isTouch = window.matchMedia('(pointer: coarse)').matches;
-            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            if (!isTouch && !prefersReduced) {
-                cursor.classList.add('active');
-
-                document.addEventListener('mousemove', (e) => {
-                    cursor.style.left = e.clientX + 'px';
-                    cursor.style.top = e.clientY + 'px';
-                });
-
-                // Hover effect on interactive elements
-                const hoverTargets = document.querySelectorAll('a, button, .tilt-card, .step-node');
-                hoverTargets.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-                });
-
-                // Hide cursor when leaving the window
-                document.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('active');
-                });
-                document.addEventListener('mouseenter', () => {
-                    cursor.classList.add('active');
-                });
-            }
-
-            // ── Scroll Reveal (multiple variants) ──
-            const revealEls = document.querySelectorAll('.reveal:not(.revealed), .reveal-scale:not(.revealed), .reveal-rotate:not(.revealed)');
-            if ('IntersectionObserver' in window && revealEls.length) {
-                const revealObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('revealed');
-                            revealObserver.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-                revealEls.forEach(el => revealObserver.observe(el));
-            } else {
-                revealEls.forEach(el => el.classList.add('revealed'));
-            }
-
-            // ── 3D Tilt ──
-            const tiltCards = document.querySelectorAll('.tilt-card');
-            if (!prefersReduced && !isTouch) {
-                tiltCards.forEach(card => {
-                    const maxTilt = 8;
-                    card.addEventListener('mousemove', (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const px = (e.clientX - rect.left) / rect.width;
-                        const py = (e.clientY - rect.top) / rect.height;
-                        const rotateY = (px - 0.5) * maxTilt * 2;
-                        const rotateX = (0.5 - py) * maxTilt * 2;
-                        card.style.transform =
-                            `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-                        card.style.setProperty('--mx', `${px * 100}%`);
-                        card.style.setProperty('--my', `${py * 100}%`);
-                    });
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0)';
-                    });
-                });
-            }
-
-            // ── Spotlight ──
-            const spotlightPairs = [
-                ['hero-section', 'hero-spotlight'],
-                ['servicios', 'servicios-spotlight'],
-                ['contacto', 'contacto-spotlight'],
-            ];
-            if (!isTouch) {
-                spotlightPairs.forEach(([sectionId, glowId]) => {
-                    const section = document.getElementById(sectionId);
-                    const glow = document.getElementById(glowId);
-                    if (!section || !glow) return;
-                    section.addEventListener('mousemove', (e) => {
-                        const rect = section.getBoundingClientRect();
-                        const x = ((e.clientX - rect.left) / rect.width) * 100;
-                        const y = ((e.clientY - rect.top) / rect.height) * 100;
-                        glow.style.setProperty('--x', `${x}%`);
-                        glow.style.setProperty('--y', `${y}%`);
-                    });
-                });
-            }
-
-            // ── Counters ──
-            const counters = document.querySelectorAll('.counter');
-            if (counters.length) {
-                const animateCounter = (el) => {
-                    const target = parseInt(el.dataset.target, 10) || 0;
-                    const prefix = el.dataset.prefix || '';
-                    const suffix = el.dataset.suffix || '';
-                    const duration = 1400;
-                    const start = performance.now();
-
-                    function step(now) {
-                        const progress = Math.min((now - start) / duration, 1);
-                        const eased = 1 - Math.pow(1 - progress, 3);
-                        el.textContent = prefix + Math.round(eased * target) + suffix;
-                        if (progress < 1) requestAnimationFrame(step);
-                    }
-                    requestAnimationFrame(step);
-                };
-                if ('IntersectionObserver' in window) {
-                    const counterObserver = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                animateCounter(entry.target);
-                                counterObserver.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.5 });
-                    counters.forEach(c => counterObserver.observe(c));
-                } else {
-                    counters.forEach(animateCounter);
-                }
-            }
-
-            // ── Parallax ──
-            const parallaxEls = document.querySelectorAll('.parallax-layer');
-            if (parallaxEls.length && !prefersReduced) {
-                let parallaxTicking = false;
-
-                function updateParallax() {
-                    const vh = window.innerHeight;
-                    parallaxEls.forEach(el => {
-                        const speed = parseFloat(el.dataset.speed || '0.1');
-                        const rect = el.getBoundingClientRect();
-                        const centerDelta = (rect.top + rect.height / 2) - vh / 2;
-                        el.style.transform = `translateY(${centerDelta * speed * -0.2}px)`;
-                    });
-                    parallaxTicking = false;
-                }
-                window.addEventListener('scroll', () => {
-                    if (!parallaxTicking) {
-                        requestAnimationFrame(updateParallax);
-                        parallaxTicking = true;
-                    }
-                }, { passive: true });
-                updateParallax();
-            }
-
-            // ── Particles (Hero) ──
-            const canvas = document.getElementById('particles-canvas');
-            if (canvas && !prefersReduced) {
-                const ctx = canvas.getContext('2d');
-                let w, h;
-                const particles = [];
-                const count = 80;
-
-                function resize() {
-                    const rect = canvas.parentElement.getBoundingClientRect();
-                    w = canvas.width = rect.width;
-                    h = canvas.height = rect.height;
-                }
-                resize();
-                window.addEventListener('resize', resize);
-
-                class Particle {
-                    constructor() {
-                        this.reset();
-                    }
-                    reset() {
-                        this.x = Math.random() * w;
-                        this.y = Math.random() * h;
-                        this.size = Math.random() * 4 + 2;
-                        this.speedX = (Math.random() - 0.5) * 0.3;
-                        this.speedY = (Math.random() - 0.5) * 0.3;
-                        this.opacity = Math.random() * 0.4 + 0.1;
-                        this.color = `hsla(${Math.random() * 60 + 30}, 80%, 70%, ${this.opacity})`;
-                    }
-                    update() {
-                        this.x += this.speedX;
-                        this.y += this.speedY;
-                        if (this.x < 0 || this.x > w) this.speedX *= -1;
-                        if (this.y < 0 || this.y > h) this.speedY *= -1;
-                    }
-                    draw() {
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                        ctx.fillStyle = this.color;
-                        ctx.fill();
-                    }
-                }
-
-                for (let i = 0; i < count; i++) {
-                    particles.push(new Particle());
-                }
-
-                function drawParticles() {
-                    ctx.clearRect(0, 0, w, h);
-                    particles.forEach(p => {
-                        p.update();
-                        p.draw();
-                    });
-                    // Draw connecting lines
-                    for (let i = 0; i < particles.length; i++) {
-                        for (let j = i + 1; j < particles.length; j++) {
-                            const dx = particles[i].x - particles[j].x;
-                            const dy = particles[i].y - particles[j].y;
-                            const dist = Math.sqrt(dx * dx + dy * dy);
-                            if (dist < 120) {
-                                ctx.beginPath();
-                                ctx.moveTo(particles[i].x, particles[i].y);
-                                ctx.lineTo(particles[j].x, particles[j].y);
-                                ctx.strokeStyle = `rgba(255, 214, 0, ${0.08 * (1 - dist / 120)})`;
-                                ctx.lineWidth = 0.8;
-                                ctx.stroke();
-                            }
-                        }
-                    }
-                    requestAnimationFrame(drawParticles);
-                }
-                drawParticles();
-            }
-
-            // ── Carousel About ──
-            const track = document.getElementById('carousel-track');
-            const dots = [document.getElementById('dot-0'), document.getElementById('dot-1')];
-            const prevBtn = document.getElementById('carousel-prev');
-            const nextBtn = document.getElementById('carousel-next');
-            const TOTAL = 6;
-            const INTERVAL_MS = 5000;
-            let current = 0;
-            let paused = false;
-            let lastTimestamp = null;
-            let rafId = null;
-
-            function goTo(index) {
-                current = (index + TOTAL) % TOTAL;
-                track.style.transform = `translate3d(-${current * 100}%, 0, 0)`;
-                dots.forEach((d, i) => {
-                    const active = i === current;
-                    d.classList.toggle('bg-brandyellow', active);
-                    d.classList.toggle('bg-white/40', !active);
-                    d.setAttribute('aria-selected', String(active));
-                });
-            }
-
-            function tick(timestamp) {
-                if (!lastTimestamp) lastTimestamp = timestamp;
-                if (!paused && timestamp - lastTimestamp >= INTERVAL_MS) {
-                    goTo(current + 1);
-                    lastTimestamp = timestamp;
-                }
-                rafId = requestAnimationFrame(tick);
-            }
-
-            if (!prefersReduced) {
-                rafId = requestAnimationFrame(tick);
-            }
-
-            const wrapper = document.getElementById('carousel-wrapper');
-            wrapper.addEventListener('mouseenter', () => { paused = true; });
-            wrapper.addEventListener('mouseleave', () => { paused = false;
-                lastTimestamp = null; });
-            wrapper.addEventListener('focusin', () => { paused = true; });
-            wrapper.addEventListener('focusout', () => { paused = false;
-                lastTimestamp = null; });
-
-            prevBtn.addEventListener('click', () => { goTo(current - 1);
-                lastTimestamp = null; });
-            nextBtn.addEventListener('click', () => { goTo(current + 1);
-                lastTimestamp = null; });
-            dots.forEach((dot, i) => {
-                dot.addEventListener('click', () => { goTo(i);
-                    lastTimestamp = null; });
-            });
-
-            let touchStartX = 0;
-            wrapper.addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].clientX;
-            }, { passive: true });
-            wrapper.addEventListener('touchend', e => {
-                const delta = e.changedTouches[0].clientX - touchStartX;
-                if (Math.abs(delta) > 40) {
-                    goTo(delta < 0 ? current + 1 : current - 1);
-                    lastTimestamp = null;
-                }
-            }, { passive: true });
-
-            document.addEventListener('visibilitychange', () => {
-                paused = document.hidden;
-                if (!paused) lastTimestamp = null;
-            });
-
-            // ── Trabajos Carousel ──
-            const tCarousel = document.getElementById('trabajos-carousel');
-            const tBtnPrev = document.getElementById('btn-trabajos-prev');
-            const tBtnNext = document.getElementById('btn-trabajos-next');
-
-            if (tCarousel && tBtnPrev && tBtnNext) {
-                tBtnPrev.addEventListener('click', () => {
-                    const cardWidth = tCarousel.querySelector('article').offsetWidth;
-                    tCarousel.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
-                });
-                tBtnNext.addEventListener('click', () => {
-                    const cardWidth = tCarousel.querySelector('article').offsetWidth;
-                    tCarousel.scrollBy({ left: (cardWidth + 24), behavior: 'smooth' });
-                });
-
-                let isDown = false;
-                let startX;
-                let scrollLeft;
-
-                tCarousel.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    tCarousel.classList.add('cursor-grabbing');
-                    tCarousel.classList.remove('cursor-grab', 'snap-mandatory');
-                    tCarousel.style.scrollBehavior = 'auto';
-                    startX = e.pageX - tCarousel.offsetLeft;
-                    scrollLeft = tCarousel.scrollLeft;
-                });
-                tCarousel.addEventListener('mouseleave', () => {
-                    isDown = false;
-                    tCarousel.classList.remove('cursor-grabbing');
-                    tCarousel.classList.add('cursor-grab', 'snap-mandatory');
-                    tCarousel.style.scrollBehavior = 'smooth';
-                });
-                tCarousel.addEventListener('mouseup', () => {
-                    isDown = false;
-                    tCarousel.classList.remove('cursor-grabbing');
-                    tCarousel.classList.add('cursor-grab', 'snap-mandatory');
-                    tCarousel.style.scrollBehavior = 'smooth';
-                });
-                tCarousel.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - tCarousel.offsetLeft;
-                    const walk = (x - startX) * 2;
-                    tCarousel.scrollLeft = scrollLeft - walk;
-                });
-            }
-
-        });
-    </script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>
