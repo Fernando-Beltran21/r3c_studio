@@ -120,7 +120,7 @@
 
 /* ===== GRADIENT TEXT ANIM ===== */
 .gradient-text-anim {
-    background: linear-gradient(90deg, #FFD600, #00E5C7, #FFD600);
+    background: linear-gradient(90deg, #FFD600, #e5e100, #FFD600);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -148,8 +148,12 @@
 .normal-card:hover {
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.55);
 }
+/* ===== NORMAL CARD PARA IMAGENES 4:5 con ajuste de tamaño de imagen ===== */
 
-
+.normal-card2 {
+    aspect-ratio: 4/5;
+    transition: box-shadow 0.3s ease;
+}
 /* ===== TILT / 3D ===== */
 .tilt-container {
     perspective: 1200px;
@@ -259,7 +263,7 @@
     .float-anim-delay {
         animation: none;
     }
-}
+}  
 
 /* ===== MARQUEE ===== */
 .marquee-mask {
@@ -269,11 +273,15 @@
 }
 .marquee-track {
     display: flex;
+    flex-wrap: nowrap;
+    width: -moz-max-content;
     width: max-content;
-    animation: marquee 28s linear infinite;
+    animation: marquee 15s linear infinite;
+    will-change: transform;
 }
-.marquee-track:hover {
-    animation-play-state: paused;
+
+.logo-ca {
+    flex-shrink: 0;
 }
 @keyframes marquee {
     0% {
@@ -507,6 +515,21 @@
     #carousel-wrapper {
         height: 320px;
     }
+}
+
+/* ===== Logos para el carrusel con max de tamaño===== */
+.logo-ca img {
+    width: auto;
+    max-width: 160px;
+    flex-shrink: 0;
+}
+
+/* Clase personalizada para limitar y autoajustar los logos del carrusel */
+.logo-auto-fit {
+    width: auto;
+    max-width: 160px; /* Límite máximo de ancho, la altura la controlan las clases h-10/h-12 */
+    flex-shrink: 0; /* evita que se compriman de forma distinta entre las dos copias del loop */
+    /* El autoajuste de proporción ya lo hace tu clase 'object-contain' de Tailwind */
 }
 
 /* ===== TRABAJOS CARRUSEL ===== */
