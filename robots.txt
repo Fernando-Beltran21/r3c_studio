@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.r3ccreativestudio.com/sitemap.xml
+Sitemap: https://www.r3cstudio.com.mx/sitemap.xml

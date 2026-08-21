@@ -274,22 +274,40 @@
 .marquee-track {
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
     width: -moz-max-content;
     width: max-content;
-    animation: marquee 15s linear infinite;
+    animation: marquee 30s linear infinite;
     will-change: transform;
+    /* ===== velocidad: ajusta la duración (segundos) para más o menos rapidez ===== */
+
 }
 
+/* Layout del grupo de logos escrito a mano (no depende de las utilidades
+   de Tailwind flex/gap/shrink, por si el bundle purgado no las incluye) */
 .logo-ca {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
     flex-shrink: 0;
+    column-gap: 2.5rem; /* equivalente a gap-x-10 */
+    padding-left: 2.5rem; /* equivalente a pl-10 */
 }
+@media (min-width: 640px) {
+    .logo-ca {
+        column-gap: 3.5rem; /* equivalente a sm:gap-x-14 */
+        padding-left: 3.5rem; /* equivalente a sm:pl-14 */
+    }
+}
+
 @keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Desplaza exactamente el 50% de la pista (un grupo de logos completo), dejando el segundo grupo idéntico en su lugar para el loop infinito */
+    transform: translateX(-50%);
+  }
 }
 
 /* ===== HERO IMAGE BOX ===== */
@@ -310,7 +328,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    opacity: 0.7;
+    opacity: 0.9;
 }
 
 /* ===== NAVBAR ===== */
@@ -526,10 +544,21 @@
 
 /* Clase personalizada para limitar y autoajustar los logos del carrusel */
 .logo-auto-fit {
+    height: 5rem; /* antes 3.5rem (56px) → ahora 80px en móvil */
     width: auto;
-    max-width: 160px; /* Límite máximo de ancho, la altura la controlan las clases h-10/h-12 */
+    max-width: 260px; /* antes 200px, subido para que no se recorte al agrandar la altura */
     flex-shrink: 0; /* evita que se compriman de forma distinta entre las dos copias del loop */
-    /* El autoajuste de proporción ya lo hace tu clase 'object-contain' de Tailwind */
+    object-fit: contain; /* equivalente a object-contain */
+    opacity: 0.7; /* equivalente a opacity-70 */
+    transition: opacity 0.3s ease;
+}
+.logo-auto-fit:hover {
+    opacity: 1; /* equivalente a hover:opacity-100 */
+}
+@media (min-width: 640px) {
+    .logo-auto-fit {
+        height: 6.5rem; /* antes 4.5rem (72px) → ahora 104px en escritorio */
+    }
 }
 
 /* ===== TRABAJOS CARRUSEL ===== */
