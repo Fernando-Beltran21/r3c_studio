@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const dots = [document.getElementById('dot-0'), document.getElementById('dot-1')].filter(Boolean);
     const prevBtn = document.getElementById('carousel-prev');
     const nextBtn = document.getElementById('carousel-next');
-    const TOTAL = 7;
+    const TOTAL = 5; // Total number of slides
     const INTERVAL_MS = 5000;
     let current = 0;
     let paused = false;
